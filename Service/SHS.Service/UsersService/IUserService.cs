@@ -24,6 +24,6 @@ namespace SHS.Service.UsersService
         /// <returns></returns>
         Task<Result> UserGiveRole(string userId, string roleId);
 
-        Task<Result> Login(string name, string password);
+        Task<User> GetUserInfo(string name, string password);
     }
 }

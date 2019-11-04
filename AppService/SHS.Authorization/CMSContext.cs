@@ -13,7 +13,7 @@ namespace SHS.Authorization
         public DbSet<User> Users { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=.\sqlexpress;uid=sa;pwd=123456;database=SHS.CMS;");
+            optionsBuilder.UseSqlServer(@"Server=.;uid=sa;pwd=123456;database=SHS.CMS;");
         }
     }
 }

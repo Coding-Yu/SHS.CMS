@@ -20,6 +20,6 @@ namespace SHS.Application.UserAppService
         Task<Result> Delete(string id);
 
         Task<Result> SetRole(string userId, string roleId);
-        Task<Result> Login(string name, string password);
+        Task<UserDto> GetUserInfo(string name, string password);
     }
 }

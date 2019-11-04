@@ -1,52 +1,41 @@
-import babelpolyfill from 'babel-polyfill'
 import Vue from 'vue'
-import App from './App'
+
+import 'normalize.css/normalize.css' // A modern alternative to CSS resets
+
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
-//import './assets/theme/theme-green/index.css'
-import VueRouter from 'vue-router'
-import store from './vuex/store'
-import Vuex from 'vuex'
-//import NProgress from 'nprogress'
-//import 'nprogress/nprogress.css'
-import routes from './routes'
-import Mock from './mock'
-Mock.bootstrap();
-import 'font-awesome/css/font-awesome.min.css'
+import 'element-ui/lib/theme-chalk/index.css'
+import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
-Vue.use(ElementUI)
-Vue.use(VueRouter)
-Vue.use(Vuex)
+import '@/styles/index.scss' // global css
 
-//NProgress.configure({ showSpinner: false });
+import App from './App'
+import store from './store'
+import router from './router'
 
-const router = new VueRouter({
-  routes
-})
+import '@/icons' // icon
+import '@/permission' // permission control
 
-router.beforeEach((to, from, next) => {
-  //NProgress.start();
-  if (to.path == '/login') {
-    sessionStorage.removeItem('user');
-  }
-  let user = JSON.parse(sessionStorage.getItem('user'));
-  if (!user && to.path != '/login') {
-    next({ path: '/login' })
-  } else {
-    next()
-  }
-})
+/**
+ * If you don't want to use mock-server
+ * you want to use MockJs for mock api
+ * you can execute: mockXHR()
+ *
+ * Currently MockJs will be used in the production environment,
+ * please remove it before going online! ! !
+ */
+import { mockXHR } from '../mock'
+if (process.env.NODE_ENV === 'production') {
+  mockXHR()
+}
 
-//router.afterEach(transition => {
-//NProgress.done();
-//});
+// set ElementUI lang to EN
+Vue.use(ElementUI, { locale })
+
+Vue.config.productionTip = false
 
 new Vue({
-  //el: '#app',
-  //template: '<App/>',
+  el: '#app',
   router,
   store,
-  //components: { App }
   render: h => h(App)
-}).$mount('#app')
-
+})

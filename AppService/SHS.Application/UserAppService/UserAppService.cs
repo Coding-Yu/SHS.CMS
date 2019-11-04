@@ -75,9 +75,9 @@ namespace SHS.Application.UserAppService
             return _mapper.Map<UserDto>(await _userService.Get(id));
         }
 
-        public async Task<Result> Login(string name, string password)
+        public async Task<UserDto> GetUserInfo(string name, string password)
         {
-            return await _userService.Login(name, password);
+            return  _mapper.Map<UserDto>(await _userService.Login(name, password));
         }
 
         public async Task<Result> SetRole(string userId, string roleId)

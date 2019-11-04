@@ -59,9 +59,9 @@ namespace SHS.Domain.Repository.Interfaces
         {
             Guid Fkey = new Guid();
             Guid.TryParse(key, out Fkey);
-            if (!string.IsNullOrWhiteSpace(Fkey.ToString()))
+            if (!string.IsNullOrWhiteSpace(key.ToString()))
             {
-                return await DbSet.FindAsync();
+                return await DbSet.FindAsync(Fkey);
             }
             return null;
         }

@@ -1,11 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace SHS.Domain.Core.Interfaces
 {
     public class BaseEntity
     {
         private Guid id { get; set; }
-
+        [Key]
         public Guid ID
         {
             get { return id; }

@@ -122,7 +122,7 @@ namespace SHS.Service.UsersService
             return result;
         }
 
-        public async Task<Result> Login(string name, string password)
+        public async Task<User> GetUserInfo(string name, string password)
         {
             if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(password))
             {
@@ -133,16 +133,11 @@ namespace SHS.Service.UsersService
                     var md5Password = MD5Encrypt.EncryptBy32(password);
                     if (user.Password == md5Password)
                     {
-                        return Result.Success();
-                    }
-                    else
-                    {
-                        return Result.Fail(500, "密码错误");
+                        return user;
                     }
                 }
-                return Result.Fail(500, "用户不存在");
             }
-            return Result.Fail(500);
+            return null;
         }
 
         public async Task<Result> Update(User user)

@@ -35,6 +35,8 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //引用跨域
+            services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             // Auto Mapper Configurations
             var mappingConfig = new MapperConfiguration(mc =>
@@ -90,6 +92,12 @@ namespace API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            //设置全局跨域
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
             app.UseAuthentication();
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();

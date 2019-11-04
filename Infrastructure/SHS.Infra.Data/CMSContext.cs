@@ -28,12 +28,17 @@ namespace SHS.Infra.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // optionsBuilder.UseSqlServer(@"Server=.\sqlexpress;uid=sa;pwd=123456;database=SHS.CMS;");
+            optionsBuilder.UseSqlServer(@"Server=.;uid=sa;pwd=123456;database=SHS.CMS;");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //TODO 软删除映射https://github.com/scfido/softdelete/blob/master/MySQLDbContext.cs
             //modelBuilder.Entity<User>().Property<bool>("IsDelete");
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity
+                .HasKey(u => u.ID);
+            });
             modelBuilder.Entity<RolePermission>()
                 .HasKey(rp => new { rp.RoleId, rp.PermissionId });
 
@@ -65,7 +70,7 @@ namespace SHS.Infra.Data
             var areaId = Guid.NewGuid();
             modelBuilder.Entity<Role>().HasData(new Role { ID = roleId, Name = "系统管理员", CreateDate = DateTime.Now, Remarks = "系统最高管理员" });
             modelBuilder.Entity<Area>().HasData(new Area { ID = areaId, City = "长沙", CreateDate = DateTime.Now, Street = "解放西", CreateUserId = userId, State = "中国" });
-            modelBuilder.Entity<User>().HasData(new User { ID = userId, Name = "admin", CreateDate = DateTime.Now, Password =MD5Encrypt.EncryptBy32("123456"), Remarks = "管理员", RoleID = roleId, AreaID = areaId });
+            modelBuilder.Entity<User>().HasData(new User { ID = userId, Name = "admin", CreateDate = DateTime.Now, Password = MD5Encrypt.EncryptBy32("123456"), Remarks = "管理员", RoleID = roleId, AreaID = areaId });
         }
     }
 

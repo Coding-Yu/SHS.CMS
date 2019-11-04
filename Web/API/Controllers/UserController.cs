@@ -1,4 +1,5 @@
-﻿using API.User.Model;
+﻿using API.Model.User;
+using API.User.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SHS.Application.UserAppService;
@@ -10,7 +11,7 @@ namespace API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class UserController : Controller
+    public class UserController : ControllerBase
     {
         private readonly IUserAppService _userAppService;
         public UserController(IUserAppService userAppService)
@@ -21,13 +22,13 @@ namespace API.Controllers
         public async Task<JsonResult> GetList(QueryUserFilter filter)
         {
             var result = await _userAppService.GetAllByAsync(filter);
-            return Json(result);
+            return new JsonResult(result);
         }
-        [HttpGet("{Get}")]
+        [HttpGet("Get")]
         public async Task<JsonResult> Get(string id)
         {
             var result = await _userAppService.GetUser(id);
-            return Json(result);
+            return new JsonResult(result);
         }
         [HttpPost("Add")]
         public async Task<JsonResult> Add(AddUserModel model)
@@ -36,7 +37,7 @@ namespace API.Controllers
             {
 
             });
-            return Json(result);
+            return new JsonResult(result);
         }
         [HttpPut("Update")]
         public async Task<JsonResult> Update(AddUserModel model)
@@ -45,25 +46,23 @@ namespace API.Controllers
             {
 
             });
-            return Json(result);
+            return new JsonResult(result);
         }
         [HttpDelete("{Delete}")]
         public async Task<JsonResult> Delete(string id)
         {
             var result = await _userAppService.Delete(id);
-            return Json(result);
+            return new JsonResult(result);
         }
         [HttpPost("SetRole")]
         public async Task<JsonResult> SetRole(string userId, string roleId)
         {
-            return Json(await _userAppService.SetRole(userId, roleId));
-        }
-        [HttpPost("Login")]
-        public async Task<JsonResult> Login(string name, string passsword)
-        {
-            return Json(await _userAppService.Login(name, passsword));
+            return new JsonResult(await _userAppService.SetRole(userId, roleId));
         }
 
-       
+        public async Task<JsonResult> GetUserInfo(GetUserInfoModel model)
+        {
+            return new JsonResult(await _userAppService.GetUserInfo(model.Username,model.Password));
+        }
     }
 }
