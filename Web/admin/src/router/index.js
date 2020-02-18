@@ -51,110 +51,91 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '控制面板', icon: 'dashboard' }
     }]
   },
 
   {
-    path: '/example',
+    path: '/centent',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
-
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
+    redirect: '/centent/categoryList',
+    name: 'centent',
     meta: {
-      title: 'Nested',
-      icon: 'nested'
+      title: '内容管理',
+      icon: 'article'
     },
     children: [
       {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
+        path: 'categoryList',
+        // component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        name: 'categoryList',
+        meta: { title: '分类列表' }
+      },
+      {
+        path: 'articleList',
+        name: 'articleList',
+        // component: () => import('@/views/nested/menu2/index'),
+        meta: { title: '文章列表' }
+      },
+      {
+        path: 'TagList',
+        name: 'TagList',
+        // component: () => import('@/views'),
+        meta: { title: '标签列表', icon: '' }
+      }
+    ]
+
+  },
+  {
+    path: '/setting',
+    component: Layout,
+    redirect: 'noredirect',
+    name: 'Setting',
+    meta: {
+      title: '设置',
+      icon: 'setting'
+    },
+    children: [
+      {
+        path: 'userSetting',
+        name: 'UserSetting',
+        meta: { title: '用户管理', icon: 'user' },
+        component: () => import('@/views/setting/userSetting/userList'),
         children: [
           {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
+            path: 'userList',
+            name: 'UserList',
+            component: () => import('@/views/setting/userSetting/userList'), // Parent router-view
+            meta: { title: '用户列表' }
           }
         ]
       },
       {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        meta: { title: 'menu2' }
-      }
-    ]
-  },
-
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
+        path: 'roleSetting',
+        name: 'RoleSetting',
+        meta: { title: '角色管理', icon: 'user' },
+        component: () => import('@/views/setting/roleSetting/roleList'),
+        children: [
+          {
+            path: 'roleList',
+            name: 'RoleList',
+            component: () => import('@/views/setting/roleSetting/roleList'),
+            meta: { title: '角色列表' }
+          }]
+      },
       {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
+        path: 'permissionSetting',
+        name: 'PermissionSetting',
+        meta: { title: '权限管理', icon: 'user' },
+        component: () => import('@/views/setting/permissionSetting/permissionList'),
+        children: [
+          {
+            path: 'permissionList',
+            name: 'PermissionList',
+            component: () => import('@/views/setting/permissionSetting/permissionList'),
+            meta: { title: '权限列表', icon: '' }
+          }
+        ]
       }
     ]
   },

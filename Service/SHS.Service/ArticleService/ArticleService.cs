@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using SHS.Domain.Core.Articles;
 using SHS.Domain.Repository.Interfaces;
 using SHS.Service.ArticleService.Dto;
@@ -89,7 +88,7 @@ namespace SHS.Service.ArticleService
                 {
                     query = query.Where(x => x.Title.Contains(filter.title));
                 }
-                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.PageSize * (filter.PageNum - 1)).Take(filter.PageSize).ToList();
+                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit).ToList();
             }
             catch (Exception ex)
             {

@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using SHS.Application.ArticleAppService;
 using SHS.Application.AutoMapper;
 using SHS.Application.CategoryAppService;
+using SHS.Application.PermissionAppService;
 using SHS.Application.RoleAppService;
 using SHS.Application.TagAppService;
 using SHS.Application.UserAppService;
@@ -16,6 +17,7 @@ using SHS.Domain.Repository.Interfaces;
 using SHS.Infra.Data;
 using SHS.Service.ArticleService;
 using SHS.Service.CategoryService;
+using SHS.Service.PermissionService;
 using SHS.Service.RoleService;
 using SHS.Service.TagService;
 using SHS.Service.UsersService;
@@ -64,6 +66,9 @@ namespace API
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<IArticleAppService, ArticleAppService>();
 
+            services.AddScoped<IPermissionService, PermissionService>();
+            services.AddScoped<IPermissionAppService, PermissionAppService>();
+
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<ITagAppService, TagAppService>();
 
@@ -87,6 +92,25 @@ namespace API
 
                     options.Audience = "API";
                 });
+            //services.AddAuthentication(options =>
+            //{
+            //    options.DefaultScheme = "Cookies";
+            //    options.DefaultChallengeScheme = "oidc";
+            //})
+            //.AddCookie("Cookies")
+            //.AddOpenIdConnect("oidc", options =>
+            //{
+            //    options.Authority = "http://localhost:5000";
+            //    options.RequireHttpsMetadata = false;
+ 
+            //    options.ClientId = "client";
+            //    options.ClientSecret = "secret";
+            //    options.ResponseType = "code";
+
+            //    options.SaveTokens = true;
+
+            //    options.Scope.Add("API");
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

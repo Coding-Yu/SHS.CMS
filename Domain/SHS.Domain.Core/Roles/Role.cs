@@ -7,11 +7,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SHS.Domain.Core.Roles
 {
     [Table("SHS.CMS.Role")]
-    public class Role : BaseEntity
+    public class Rolepermission : BaseEntity
     {
         public string Name { get; set; }
 
         public bool IsDefault { get; set; }
+        public string Summary { get; set; }
         public List<User> Users { get; set; }
 
         public List<RolePermission> RolePermissions { get; set; }

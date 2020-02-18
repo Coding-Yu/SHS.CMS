@@ -20,7 +20,7 @@ namespace SHS.Application.ArticleAppService
             _articleService = articleService;
             _mapper = mapper;
         }
-        public async Task<Result> Add(ArticleDto article)
+        public async Task<Result> Add(AddArticleDto article)
         {
             return await _articleService.Add(_mapper.Map<Article>(article));
         }
@@ -41,8 +41,8 @@ namespace SHS.Application.ArticleAppService
             var articles = await _articleService.GetAll(new Service.ArticleService.Dto.QueryArticleFilter()
             {
                 PageCount = filter.PageCount,
-                PageNum = filter.PageNum,
-                PageSize = filter.PageSize,
+                page = filter.page,
+                limit = filter.limit,
                 Sort = filter.Sort,
                 title = filter.title,
             });
@@ -53,7 +53,7 @@ namespace SHS.Application.ArticleAppService
             return result;
         }
 
-        public async Task<Result> Update(ArticleDto article)
+        public async Task<Result> Update(ModifyArticleDto article)
         {
             return await _articleService.Update(_mapper.Map<Article>(article));
         }

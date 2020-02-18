@@ -5,10 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SHS.Domain.Core.Permissions
 {
     [Table("SHS.CMS.Permission")]
-    public class Permission: BaseEntity
+    public class Permission : BaseEntity
     {
         public string Name { get; set; }
-        public string Remark { get; set; }
+        public string Path { get; set; }
         public List<RolePermission> RolePermissions { get; set; }
     }
 }

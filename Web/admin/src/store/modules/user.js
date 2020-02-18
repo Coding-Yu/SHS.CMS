@@ -4,8 +4,10 @@ import { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
-  name: '',
+  name: 'admin',
   avatar: ''
+  // name: 'admin',
+  // avatar: 'https://www.baidu.com/img/bd_logo1.png?where=super'
 }
 
 const mutations = {
@@ -41,13 +43,13 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-
         if (!data) {
-          reject('Verification failed, please Login again.')
+          reject('验证失败请重新登录！')
         }
-
-        const { name, avatar } = data
-
+        state.name = data.data.name
+        state.avatar = data.data.avatar
+        const { name } = data
+        const { avatar } = data.data.name
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         resolve(data)

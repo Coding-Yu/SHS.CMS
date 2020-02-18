@@ -14,10 +14,10 @@ namespace SHS.Service.UsersService
 {
     public class UserService : IUserService
     {
-        private readonly IRepository<Role> _roleRepository;
+        private readonly IRepository<Rolepermission> _roleRepository;
         private readonly IRepository<User> _repository;
         private readonly ILogger<UserService> _logger;
-        public UserService(IRepository<User> repository, ILogger<UserService> logger, IRepository<Role> roleRepository)
+        public UserService(IRepository<User> repository, ILogger<UserService> logger, IRepository<Rolepermission> roleRepository)
         {
             _logger = logger;
             _repository = repository;
@@ -90,12 +90,12 @@ namespace SHS.Service.UsersService
             var result = new List<User>();
             try
             {
-                var query =  _repository.GetAll();
+                var query = _repository.GetAll();
                 if (!string.IsNullOrWhiteSpace(filter.Name))
                 {
-                    query = query.Where(x => x.Name == filter.Name || x.Email == filter.Email || x.Phone == filter.Phone);
+                    query = query.Where(x => x.Name == filter.Name  || x.Phone == filter.Phone);
                 }
-                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.PageSize * (filter.PageNum-1)).Take(filter.PageSize).ToList();
+                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit).ToList();
             }
             catch (Exception ex)
             {
@@ -111,9 +111,13 @@ namespace SHS.Service.UsersService
                 var query = await _repository.GetAllByAsync();
                 if (!string.IsNullOrWhiteSpace(filter.Name))
                 {
-                    query = query.Where(x => x.Name == filter.Name || x.Email == filter.Email || x.Phone == filter.Phone);
+                    query = query.Where(x => x.Name == filter.Name);
                 }
-                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.PageSize * (filter.PageNum - 1)).Take(filter.PageSize).ToList();
+                if (!string.IsNullOrWhiteSpace(filter.Phone))
+                {
+                    query = query.Where(x => x.Phone == filter.Phone);
+                }
+                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit).ToList();
             }
             catch (Exception ex)
             {

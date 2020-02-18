@@ -1,4 +1,10 @@
 ﻿using AutoMapper;
+using SHS.Application.PermissionAppService.Dtos;
+using SHS.Application.RoleAppService.Dtos;
+using SHS.Application.UserAppService.Dtos;
+using SHS.Domain.Core.Permissions;
+using SHS.Domain.Core.Roles;
+using SHS.Infra.Data.Users;
 using System;
 using System.Reflection;
 
@@ -11,6 +17,8 @@ namespace SHS.Application.AutoMapper
             var configuration = new MapperConfiguration(cfg => cfg.AddMaps(AppDomain.CurrentDomain.GetAssemblies().GetType()));
 
             var mapper = new Mapper(configuration);
+
+            //role嵌套映射
             
             //   //映射发生之前
             //   .BeforeMap((source, dto) => {

@@ -7,12 +7,12 @@ namespace SHS.Application.PermissionAppService
 {
     public interface IPermissionAppService
     {
-        Task<Result> Add(PermiisionDto permission);
+        Task<Result> Add(AddPermissionDto permission);
 
-        Task<PermiisionDto> Get(string id);
+        Task<PermissionDto> Get(string id);
 
-        Task<IEnumerable<PermiisionDto>> GetAll( QueryPermissionFilter filter);
-        Task<Result> Update(PermiisionDto permiision);
+        Task<IEnumerable<PermissionDto>> GetAll( QueryPermissionFilter filter);
+        Task<Result> Update(ModifyPermissionDto permiision);
 
         Task<Result> Delete(string id);
     }

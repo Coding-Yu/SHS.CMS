@@ -15,22 +15,25 @@ namespace SHS.Service.RoleService
 {
     public class RoleService : IRoleService
     {
-        private readonly IRepository<Role> _roleRepository;
+        private readonly IRepository<Rolepermission> _roleRepository;
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<RolePermission> _rolePermissionRepository;
         private readonly ILogger<RoleService> _logger;
-        public RoleService(IRepository<Role> roleRepository,
+        private readonly IRepository<Permission> _permissionRepository;
+        public RoleService(IRepository<Rolepermission> roleRepository,
             ILogger<RoleService> logger,
             IUserService userService,
             IRepository<User> userRepository,
-            IRepository<RolePermission> rolePermissionRepository)
+            IRepository<RolePermission> rolePermissionRepository,
+            IRepository<Permission> permissionRepository)
         {
+            _permissionRepository = permissionRepository;
             _rolePermissionRepository = rolePermissionRepository;
             _userRepository = userRepository;
             _logger = logger;
             _roleRepository = roleRepository;
         }
-        public async Task<Result> Add(Role role)
+        public async Task<Result> Add(Rolepermission role)
         {
             try
             {
@@ -52,34 +55,34 @@ namespace SHS.Service.RoleService
         {
             try
             {
-                
+
                 if (!string.IsNullOrEmpty(id.ToString()))
                 {
                     var entity = await _roleRepository.GetByAsync(id);
                     //在删除角色时应该是直接赋予该角色下所有用户为默认角色，且默认角色不可删除
-                    if (entity != null && entity.IsDefault == false)
+                    //if (entity != null && entity.IsDefault == false)
+                    //{
+                    //将该角色下得用户全部转为默认角色
+                    var users = _userRepository.GetAll().Where(x => x.RoleID == Guid.Parse(id)).ToList();//获取所有该角色得用户
+                    var defalutRole = _roleRepository.GetAll().FirstOrDefault(x => x.IsDefault == true);//获取默认角色
+                    foreach (var user in users)
                     {
-                        //将该角色下得用户全部转为默认角色
-                        var users = _userRepository.GetAll().Where(x => x.RoleID ==Guid.Parse(id)).ToList();//获取所有该角色得用户
-                        var defalutRole = _roleRepository.GetAll().FirstOrDefault(x => x.IsDefault == true);//获取默认角色
-                        foreach (var user in users)
-                        {
-                            user.RoleID = defalutRole.ID;
-                            await _userRepository.UpdateByAsync(user);
-                        }
-                        //删除角色权限关联
-                        var rolePermission = _rolePermissionRepository.GetAll().Where(x => x.RoleId ==Guid.Parse(id)).ToList();
-                        foreach (var rolePermissionItem in rolePermission)
-                        {
-                            _rolePermissionRepository.Remove(rolePermissionItem);
-                        }
-                        await _roleRepository.RemoveByAsync(entity);
-                        return Result.Success(200);
+                        user.RoleID = defalutRole.ID;
+                        await _userRepository.UpdateByAsync(user);
                     }
-                    else
+                    //删除角色权限关联
+                    var rolePermission = _rolePermissionRepository.GetAll().Where(x => x.RoleId == Guid.Parse(id)).ToList();
+                    foreach (var rolePermissionItem in rolePermission)
                     {
-                        return Result.Fail(503, "默认角色不能删除");
+                        _rolePermissionRepository.Remove(rolePermissionItem);
                     }
+                    await _roleRepository.RemoveByAsync(entity);
+                    return Result.Success(200);
+                    //}
+                    //else
+                    //{
+                    //    return Result.Fail(503, "默认角色不能删除");
+                    //}
                 }
                 return Result.Fail(500);
             }
@@ -90,7 +93,7 @@ namespace SHS.Service.RoleService
             }
         }
 
-        public async Task<Role> Get(string id)
+        public async Task<Rolepermission> Get(string id)
         {
             try
             {
@@ -107,9 +110,9 @@ namespace SHS.Service.RoleService
             }
         }
 
-        public async Task<IEnumerable<Role>> GetAll(QueryRoleFilter filter)
+        public async Task<IEnumerable<Rolepermission>> GetAll(QueryRoleFilter filter)
         {
-            var result = new List<Role>();
+            var result = new List<Rolepermission>();
             try
             {
                 var query = await _roleRepository.GetAllByAsync();
@@ -117,7 +120,7 @@ namespace SHS.Service.RoleService
                 {
                     query = query.Where(x => x.Name == filter.name);
                 }
-                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.PageSize * (filter.PageNum - 1)).Take(filter.PageSize).ToList();
+                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit).ToList();
             }
             catch (Exception ex)
             {
@@ -126,7 +129,7 @@ namespace SHS.Service.RoleService
             return result;
         }
 
-        public async Task<Result> RoleGivePermission(string roleid, List<string> permissionIds)
+        public async Task<Result> RoleGivePermission(string roleid, IList<string> permissionIds)
         {
             try
             {
@@ -134,12 +137,15 @@ namespace SHS.Service.RoleService
                 {
                     foreach (var pid in permissionIds)
                     {
-                        //TODO 这里需要校验权限是否存在
-                        await _rolePermissionRepository.AddByAsync(new RolePermission()
+                        var permission = _permissionRepository.GetAll().FirstOrDefault(x => x.Name == pid);
+                        if (permission != null)
                         {
-                            PermissionId =Guid.Parse(pid),
-                            RoleId =Guid.Parse( roleid),
-                        });
+                            await _rolePermissionRepository.AddByAsync(new RolePermission()
+                            {
+                                PermissionId = permission.ID,
+                                RoleId = Guid.Parse(roleid),
+                            });
+                        }
                     }
                     return Result.Success(200);
                 }
@@ -152,23 +158,26 @@ namespace SHS.Service.RoleService
             }
         }
 
-        public async Task<Result> Update(Role role)
+        public async Task<Result> Update(Rolepermission role)
         {
             try
             {
-                if (role != null)
+
+                var result = _roleRepository.Get(role.ID);
+                if (result != null)
                 {
-                    var defaultRole = _roleRepository.GetAll().FirstOrDefault(x => x.IsDefault == true);
-                    if (role.IsDefault == true && defaultRole != null)
-                    {
-                        _logger.LogError("{0}:,{1},更新失败，已存在默认角色不能直接修改默认角色", DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"), "RoleServiceUpdateRole");
-                        return Result.Fail(500, "已存在默认角色不能直接修改默认角色");
-                    }
-                    else
-                    {
-                        await _roleRepository.UpdateByAsync(role);
-                        return Result.Success(200);
-                    }
+                    //if (result.IsDefault == true)
+                    //{
+                    //    _logger.LogError("{0}:,{1},更新失败，已存在默认角色不能直接修改默认角色", DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"), "RoleServiceUpdateRole");
+                    //    return Result.Fail(500, "默认角色不能修改");
+                    //}
+                    //else
+                    //{
+                    //    await _roleRepository.UpdateByAsync(role);
+                    //    return Result.Success(200);
+                    //}
+                    await _roleRepository.UpdateByAsync(role);
+                    return Result.Success(200);
                 }
                 _logger.LogError("{0}:,{1},更新失败", DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"), "RoleServiceUpdateRole");
                 return Result.Fail(500);
@@ -179,6 +188,36 @@ namespace SHS.Service.RoleService
                 _logger.LogError("角色更新异常" + ex.ToString());
                 return Result.Fail(500, ex.ToString());
             }
+        }
+
+        public async Task<IList<Permission>> GetPermissionByRoleId(string id)
+        {
+            var result = new List<Permission>();
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                var query = from rp in _rolePermissionRepository.GetAll()
+                            join r in _roleRepository.GetAll() on rp.RoleId equals r.ID
+                            join p in _permissionRepository.GetAll() on rp.PermissionId equals p.ID
+                            where rp.RoleId == Guid.Parse(id)
+                            select new
+                            {
+                                Id = p.ID,
+                                Name = p.Name,
+                                Path = p.Path
+                            };
+                var list = query.ToList();
+                foreach (var item in list)
+                {
+                    result.Add(new Permission()
+                    {
+                        ID = item.Id,
+                        Name = item.Name,
+                        Path = item.Path
+                    });
+                }
+                return result;
+            }
+            return result;
         }
     }
 }

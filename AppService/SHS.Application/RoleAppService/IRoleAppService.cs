@@ -1,4 +1,5 @@
 ﻿using SHS.Application.RoleAppService.Dtos;
+using SHS.Domain.Core.Permissions;
 using SHS.Service.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,6 +17,8 @@ namespace SHS.Application.RoleAppService
 
         Task<Result> Delete(string id);
 
-        Task<Result> RoleGivePermission(string roleid, List<string> permissionIds);
+        Task<Result> RoleGivePermission(string roleid, IList<string> permissionIds);
+
+        Task<IList<Permission>> GetPermissionByRoleId(string id);
     }
 }

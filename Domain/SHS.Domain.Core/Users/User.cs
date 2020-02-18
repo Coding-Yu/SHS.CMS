@@ -18,7 +18,7 @@ namespace SHS.Infra.Data.Users
         public int Age { get; set; }
         public int DetailAddress { get; set; }
         public Guid RoleID { get; set; }
-        public Role Role { get; set; }
+        public Rolepermission Role { get; set; }
 
         public Guid AreaID { get; set; }
         public Area Area { get; set; }

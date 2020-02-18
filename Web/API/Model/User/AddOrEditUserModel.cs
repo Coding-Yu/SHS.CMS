@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace API.User.Model
 {
-    public class AddUserModel
+    public class AddOrEditUserModel
     {
-        private string password { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
@@ -16,6 +16,6 @@ namespace API.User.Model
         public int Age { get; set; }
         public int Area { get; set; }
         public string RoleID { get; set; }
-        public string Remark { get; set; }
+        public string Remarks { get; set; }
     }
 }

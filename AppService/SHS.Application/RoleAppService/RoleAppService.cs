@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using SHS.Application.RoleAppService.Dtos;
+using SHS.Application.UserAppService.Dtos;
+using SHS.Domain.Core.Permissions;
 using SHS.Domain.Core.Roles;
+using SHS.Infra.Data.Users;
 using SHS.Service.Interfaces;
 using SHS.Service.RoleService;
 using System;
@@ -18,9 +21,16 @@ namespace SHS.Application.RoleAppService
             _roleService = roleService;
             _mapper = mapper;
         }
-        public async Task<Result> AddAsync(RoleDto role)
+        public async Task<Result> AddAsync(RoleDto dto)
         {
-            return await _roleService.Add(_mapper.Map<Role>(role));
+            Rolepermission role = new Rolepermission();
+            role.Name = dto.Name;
+            role.Summary = dto.Summary;
+            role.IsDefault = dto.isDefault;
+            role.Remarks = dto.Remarks;
+            role.CreateDate = dto.CreateDate;
+            role.CreateUserId = dto.CreateUserId;
+            return await _roleService.Add(role);
         }
 
         public async Task<Result> Delete(string id)
@@ -38,27 +48,48 @@ namespace SHS.Application.RoleAppService
             var result = new List<RoleDto>();
             var roles = await _roleService.GetAll(new Service.RoleService.Dto.QueryRoleFilter()
             {
-                name = filter.name,
+                name = filter.Name,
                 PageCount = filter.PageCount,
-                PageNum = filter.PageNum,
-                PageSize = filter.PageSize,
+                page = filter.page,
+                limit = filter.limit,
                 Sort = filter.Sort,
             });
             foreach (var item in roles)
             {
-                result.Add(_mapper.Map<RoleDto>(item));
+                result.Add(new RoleDto()
+                {
+                    CreateDate = item.CreateDate,
+                    CreateUserId = item.CreateUserId,
+                    ID = item.ID.ToString().ToUpper(),
+                    isDefault = item.IsDefault,
+                    Name = item.Name,
+                    Remarks = item.Remarks,
+                    Summary=item.Summary,
+                    IsDel = item.IsDel,
+                });
             }
             return result;
         }
 
-        public async Task<Result> RoleGivePermission(string roleid, List<string> permissionIds)
+        public async Task<Result> RoleGivePermission(string roleid, IList<string> permissionIds)
         {
             return await _roleService.RoleGivePermission(roleid, permissionIds);
         }
 
-        public async Task<Result> Update(RoleDto role)
+        public async Task<Result> Update(RoleDto dto)
         {
-            return await _roleService.Update(_mapper.Map<Role>(role));
+            Rolepermission role = new Rolepermission();
+            role.ID = Guid.Parse(dto.ID);
+            role.Name = dto.Name;
+            role.Summary = dto.Summary;
+            role.IsDefault = dto.isDefault;
+            role.Remarks = dto.Remarks;
+            role.UpdateDate = dto.CreateDate;
+            // role.UpdateUserId =Guid.Parse(dto.UpdateUserId.ToString());
+            return await _roleService.Update(_mapper.Map<Rolepermission>(role));
+        }
+        public async Task<IList<Permission>> GetPermissionByRoleId(string id) {
+            return await _roleService.GetPermissionByRoleId(id);
         }
     }
 }

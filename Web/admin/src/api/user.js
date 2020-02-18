@@ -10,9 +10,9 @@ export function login(data) {
 
 export function getInfo(data) {
   return request({
-    url: config.BASE_URL + 'user/GetUserInfo',
-    method: 'post',
-    data
+    url: config.BASE_URL + 'Authentication/GetUser',
+    method: 'post'
+    // data: 'token' + data
   })
 }
 
@@ -20,5 +20,46 @@ export function logout() {
   return request({
     url: '/user/logout',
     method: 'post'
+  })
+}
+
+// 获取用户列表
+export function getUserList(query) {
+  return request({
+    url: config.BASE_URL + 'User/GetList',
+    method: 'post',
+    params: query
+  })
+}
+
+export function getUser(id) {
+  return request({
+    url: config.BASE_URL + 'user/Get',
+    method: 'get',
+    params: id
+  })
+}
+
+export function createUser(data) {
+  return request({
+    url: config.BASE_URL + 'user/Add',
+    method: 'post',
+    data
+  })
+}
+
+export function updateUser(data) {
+  return request({
+    url: config.BASE_URL + 'user/Update',
+    method: 'post',
+    data
+  })
+}
+
+export function deleteUser(id) {
+  return request({
+    url: config.BASE_URL + 'user/delete',
+    method: 'get',
+    params: { id: id }
   })
 }

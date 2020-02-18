@@ -17,7 +17,7 @@ namespace SHS.Application.TagAppService
             _mapper = mapper;
             _tagService = tagService;
         }
-        public async Task<Result> Add(TagDto tag)
+        public async Task<Result> Add(AddTagDto tag)
         {
             return await _tagService.Add(_mapper.Map<Tag>(tag));
         }
@@ -39,8 +39,8 @@ namespace SHS.Application.TagAppService
             {
                 name = filter.name,
                 PageCount = filter.PageCount,
-                PageNum = filter.PageNum,
-                PageSize = filter.PageSize,
+                page = filter.page,
+                limit = filter.limit,
                 Sort = filter.Sort,
             });
             foreach (var item in tags)
@@ -50,7 +50,7 @@ namespace SHS.Application.TagAppService
             return result;
         }
 
-        public async Task<Result> Update(TagDto tag)
+        public async Task<Result> Update(EditTagDto tag)
         {
             return await _tagService.Update(_mapper.Map<Tag>(tag));
         }

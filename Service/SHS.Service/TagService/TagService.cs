@@ -87,7 +87,7 @@ namespace SHS.Service.TagService
                 {
                     query = query.Where(x => x.Name.Contains(filter.name));
                 }
-                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.PageSize * (filter.PageNum - 1)).Take(filter.PageSize).ToList();
+                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit).ToList();
             }
             catch (Exception ex)
             {

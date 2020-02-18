@@ -16,6 +16,6 @@ namespace SHS.Application.ArticleAppService.Dtos
 
         public string CategoryId { get; set; }
 
-        public List<string> ArticleTag { get; set; }
+        public IList<string> TagIds { get; set; }
     }
 }

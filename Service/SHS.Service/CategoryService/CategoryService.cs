@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using SHS.Domain.Core.Categorys;
 using SHS.Domain.Repository.Interfaces;
 using SHS.Service.CategoryService.Dto;
@@ -87,7 +86,7 @@ namespace SHS.Service.CategoryService
                 {
                     query = query.Where(x => x.Name.Contains(filter.name));
                 }
-                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.PageSize * (filter.PageNum - 1)).Take(filter.PageSize).ToList();
+                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit).ToList();
             }
             catch (Exception ex)
             {

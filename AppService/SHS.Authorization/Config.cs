@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Models;
+﻿using IdentityServer4;
+using IdentityServer4.Models;
 using IdentityServer4.Test;
 using SHS.Infra.Data;
 using System.Collections.Generic;
@@ -14,8 +15,19 @@ namespace SHS.Authorization
             return new List<ApiResource>
             {
                 new ApiResource("API", "SHS.CMS.API")
+                //new ApiResource(){
+                // Name="API",
+                // DisplayName="SHS.CMS.API",
+                // //Scopes={
+                // //       new Scope(){
+                // //           Name="API.full_access",
+                // //           DisplayName="full access to API",
+                // //       }
+                // //}
+                // }
             };
         }
+
         public static IEnumerable<Client> GetClients()
         {
             return new List<Client>
@@ -34,7 +46,14 @@ namespace SHS.Authorization
                     },
 
                     // scopes that client has access to
-                    AllowedScopes = { "API" }
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "API"
+                    },
+                    AllowOfflineAccess = true
+
                 }
             };
         }

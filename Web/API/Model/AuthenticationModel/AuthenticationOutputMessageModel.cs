@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace API.Model.Role
+namespace API.Model.AuthenticationModel
 {
-    public class AddRoleModel
+    public class AuthenticationOutputMessageModel: OutputModel
     {
+       
     }
 }

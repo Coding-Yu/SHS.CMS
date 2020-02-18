@@ -5,11 +5,12 @@ using System.Collections.Generic;
 
 namespace SHS.Application.RoleAppService.Dtos
 {
-    [AutoMap(typeof(Role))]
+    [AutoMap(typeof(Rolepermission))]
     public class AddRoleDto : BaseDto
     {
         public string Name { get; set; }
         public bool IsDefault { get; set; }
-        public List<string> UserId { get; set; }
+
+        public string Summary { get; set; }
     }
 }

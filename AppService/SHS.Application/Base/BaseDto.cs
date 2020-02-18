@@ -11,10 +11,10 @@ namespace SHS.Application.Base
         public long Sort { get; set; }
         public int IsDel { get; set; }
 
-        public long CreateUserId { get; set; }
+        public Guid CreateUserId { get; set; }
         public DateTime CreateDate { get; set; }
 
-        public long UpdateUserId { get; set; }
+        public Guid UpdateUserId { get; set; }
 
         public DateTime UpdateDate { get; set; }
 

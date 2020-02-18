@@ -7,9 +7,9 @@ namespace SHS.Application.TagAppService
 {
     public interface ITagAppService
     {
-        Task<Result> Add(TagDto tag);
+        Task<Result> Add(AddTagDto tag);
         Task<IEnumerable<TagDto>> GetAll(QueryTagFilter filter);
-        Task<Result> Update(TagDto tag);
+        Task<Result> Update(EditTagDto tag);
         Task<TagDto> Get(string id);
         Task<Result> Delete(string id);
     }

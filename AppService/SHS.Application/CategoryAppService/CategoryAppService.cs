@@ -19,7 +19,7 @@ namespace SHS.Application.CategoryAppService
             _mapper = mapper;
             _categoryService = categoryService;
         }
-        public async Task<Result> Add(CategoryDto category)
+        public async Task<Result> Add(AddCategoryDto category)
         {
             return await _categoryService.Add(_mapper.Map<Category>(category));
         }
@@ -41,8 +41,8 @@ namespace SHS.Application.CategoryAppService
             {
                 name = filter.name,
                 PageCount = filter.PageCount,
-                PageNum = filter.PageNum,
-                PageSize = filter.PageSize,
+                page = filter.page,
+                limit = filter.limit,
                 Sort = filter.Sort,
             });
             foreach (var item in categorys)
@@ -52,7 +52,7 @@ namespace SHS.Application.CategoryAppService
             return result;
         }
 
-        public async Task<Result> Update(CategoryDto category)
+        public async Task<Result> Update(ModifyCategoryDto category)
         {
             return await _categoryService.Update(_mapper.Map<Category>(category));
         }

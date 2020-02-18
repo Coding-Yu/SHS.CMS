@@ -9,7 +9,7 @@ namespace SHS.Application.PermissionAppService.Dtos
     public class AddPermissionDto:BaseDto
     {
         public string Name { get; set; }
-        public string Remark { get; set; }
-        public List<string> RolePermissions { get; set; }
+
+        public string Path { get; set; }
     }
 }

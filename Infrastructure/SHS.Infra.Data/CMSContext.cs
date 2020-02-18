@@ -16,7 +16,7 @@ namespace SHS.Infra.Data
     public class CMSContext : DbContext
     {
         public DbSet<User> Users { get; set; }
-        public DbSet<Role> Roles { get; set; }
+        public DbSet<Rolepermission> Roles { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -68,7 +68,7 @@ namespace SHS.Infra.Data
             var userId = Guid.NewGuid();
             var roleId = Guid.NewGuid();
             var areaId = Guid.NewGuid();
-            modelBuilder.Entity<Role>().HasData(new Role { ID = roleId, Name = "系统管理员", CreateDate = DateTime.Now, Remarks = "系统最高管理员" });
+            modelBuilder.Entity<Rolepermission>().HasData(new Rolepermission { ID = roleId, Name = "系统管理员", CreateDate = DateTime.Now, Remarks = "系统最高管理员" });
             modelBuilder.Entity<Area>().HasData(new Area { ID = areaId, City = "长沙", CreateDate = DateTime.Now, Street = "解放西", CreateUserId = userId, State = "中国" });
             modelBuilder.Entity<User>().HasData(new User { ID = userId, Name = "admin", CreateDate = DateTime.Now, Password = MD5Encrypt.EncryptBy32("123456"), Remarks = "管理员", RoleID = roleId, AreaID = areaId });
         }

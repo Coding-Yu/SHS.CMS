@@ -9,7 +9,7 @@ namespace SHS.Domain.Core.Permissions
     {
         public Guid ID { get; set; }
         public Guid RoleId { get; set; }
-        public Role role { get; set; }
+        public Rolepermission role { get; set; }
         public Guid PermissionId { get; set; }
         public Permission Permission { get; set; }
     }

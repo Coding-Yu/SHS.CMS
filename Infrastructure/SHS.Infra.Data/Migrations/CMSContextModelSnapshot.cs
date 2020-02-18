@@ -15,7 +15,7 @@ namespace SHS.Infra.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -57,10 +57,10 @@ namespace SHS.Infra.Data.Migrations
                     b.HasData(
                         new
                         {
-                            ID = new Guid("ba1ae598-bb58-4450-acfc-dec4a69b98cb"),
+                            ID = new Guid("922d74f6-898c-4aec-9bc1-c131fcab6c13"),
                             City = "长沙",
-                            CreateDate = new DateTime(2019, 9, 4, 16, 50, 49, 213, DateTimeKind.Local).AddTicks(7367),
-                            CreateUserId = new Guid("937f6ed9-c753-4305-8f87-beb98857ec6c"),
+                            CreateDate = new DateTime(2020, 2, 17, 2, 41, 51, 863, DateTimeKind.Local).AddTicks(561),
+                            CreateUserId = new Guid("af68b4f9-896e-41a6-92db-82009ebdbc59"),
                             DeleteDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeleteUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             IsDel = 0,
@@ -159,7 +159,7 @@ namespace SHS.Infra.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<string>("Remark");
+                    b.Property<string>("Path");
 
                     b.Property<string>("Remarks");
 
@@ -212,6 +212,8 @@ namespace SHS.Infra.Data.Migrations
 
                     b.Property<long>("Sort");
 
+                    b.Property<string>("Summary");
+
                     b.Property<DateTime>("UpdateDate");
 
                     b.Property<Guid>("UpdateUserId");
@@ -223,8 +225,8 @@ namespace SHS.Infra.Data.Migrations
                     b.HasData(
                         new
                         {
-                            ID = new Guid("b2d78d2e-cfb4-4a21-8877-c7d91c1d60e4"),
-                            CreateDate = new DateTime(2019, 9, 4, 16, 50, 49, 212, DateTimeKind.Local).AddTicks(5167),
+                            ID = new Guid("2fbe8d77-c2a2-45ba-b39a-6363121a1578"),
+                            CreateDate = new DateTime(2020, 2, 17, 2, 41, 51, 862, DateTimeKind.Local).AddTicks(1005),
                             CreateUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             DeleteDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeleteUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -337,10 +339,10 @@ namespace SHS.Infra.Data.Migrations
                     b.HasData(
                         new
                         {
-                            ID = new Guid("937f6ed9-c753-4305-8f87-beb98857ec6c"),
+                            ID = new Guid("af68b4f9-896e-41a6-92db-82009ebdbc59"),
                             Age = 0,
-                            AreaID = new Guid("ba1ae598-bb58-4450-acfc-dec4a69b98cb"),
-                            CreateDate = new DateTime(2019, 9, 4, 16, 50, 49, 213, DateTimeKind.Local).AddTicks(9533),
+                            AreaID = new Guid("922d74f6-898c-4aec-9bc1-c131fcab6c13"),
+                            CreateDate = new DateTime(2020, 2, 17, 2, 41, 51, 863, DateTimeKind.Local).AddTicks(2811),
                             CreateUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             DeleteDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeleteUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -349,7 +351,7 @@ namespace SHS.Infra.Data.Migrations
                             Name = "admin",
                             Password = "e1adc3949ba59abbe56e057f2f883e",
                             Remarks = "管理员",
-                            RoleID = new Guid("b2d78d2e-cfb4-4a21-8877-c7d91c1d60e4"),
+                            RoleID = new Guid("2fbe8d77-c2a2-45ba-b39a-6363121a1578"),
                             Sex = 0,
                             Sort = 0L,
                             UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),

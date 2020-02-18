@@ -9,11 +9,11 @@ namespace SHS.Domain.Core.Interfaces
         /// <summary>
         /// 一页显示条数
         /// </summary>
-        public int PageSize { get; set; }
+        public int limit { get; set; }
         /// <summary>
         /// 显示页数
         /// </summary>
-        public int PageNum { get; set; }
+        public int page { get; set; }
         /// <summary>
         /// 总数量
         /// </summary>

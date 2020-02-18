@@ -29,7 +29,7 @@ namespace SHS.Domain.Repository.Interfaces
 
         public async Task<TEntity> AddByAsync(TEntity obj)
         {
-            DbSet.Add(obj);
+            _dbContext.Add(obj);
             await _dbContext.SaveChangesAsync();
             return obj;
         }
@@ -74,7 +74,7 @@ namespace SHS.Domain.Repository.Interfaces
 
         public async Task<int> RemoveByAsync(TEntity entity)
         {
-            DbSet.Remove(entity);
+            _dbContext.Remove(entity);
             return await _dbContext.SaveChangesAsync();
         }
 
@@ -107,7 +107,7 @@ namespace SHS.Domain.Repository.Interfaces
 
         public async Task<int> UpdateByAsync(TEntity obj)
         {
-            DbSet.Update(obj);
+            _dbContext.Update(obj);
             return await _dbContext.SaveChangesAsync();
         }
     }

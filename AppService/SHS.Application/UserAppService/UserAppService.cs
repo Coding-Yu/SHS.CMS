@@ -37,12 +37,11 @@ namespace SHS.Application.UserAppService
             var result = new List<UserDto>();
             var users =  _userService.GetAll(new Service.UsersService.Dto.QueryUserFilter()
             {
-                Email = filter.Email,
-                Name = filter.Name,
+                Name = filter.name,
                 PageCount = filter.PageCount,
-                PageNum = filter.PageNum,
-                PageSize = filter.PageSize,
-                Phone = filter.Phone,
+                page = filter.page,
+                limit = filter.limit,
+                Phone = filter.phone,
                 Sort = filter.Sort,
             });
             foreach (var item in users)
@@ -56,12 +55,11 @@ namespace SHS.Application.UserAppService
             var result = new List<UserDto>();
             var users = await _userService.GetAllByAsync(new Service.UsersService.Dto.QueryUserFilter()
             {
-                Email = filter.Email,
-                Name = filter.Name,
+                Name = filter.name,
                 PageCount = filter.PageCount,
-                PageNum = filter.PageNum,
-                PageSize = filter.PageSize,
-                Phone = filter.Phone,
+                page = filter.page,
+                limit = filter.limit,
+                Phone = filter.phone,
                 Sort = filter.Sort,
             });
             foreach (var item in users)
@@ -77,7 +75,7 @@ namespace SHS.Application.UserAppService
 
         public async Task<UserDto> GetUserInfo(string name, string password)
         {
-            return  _mapper.Map<UserDto>(await _userService.Login(name, password));
+            return  _mapper.Map<UserDto>(await _userService.GetUserInfo(name, password));
         }
 
         public async Task<Result> SetRole(string userId, string roleId)
