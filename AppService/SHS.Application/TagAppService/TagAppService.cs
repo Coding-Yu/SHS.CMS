@@ -3,6 +3,7 @@ using SHS.Application.TagAppService.Dtos;
 using SHS.Domain.Core.Tags;
 using SHS.Service.Interfaces;
 using SHS.Service.TagService;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -17,14 +18,14 @@ namespace SHS.Application.TagAppService
             _mapper = mapper;
             _tagService = tagService;
         }
-        public async Task<Result> Add(AddTagDto tag)
+        public async Task<Result> Add(AddTagDto dto)
         {
-            return await _tagService.Add(_mapper.Map<Tag>(tag));
+            return await _tagService.Add(_mapper.Map<Tag>(dto));
         }
 
-        public async Task<Result> Delete(string id)
+        public async Task<Result> Delete(string id, string userId)
         {
-            return await _tagService.Delete(id);
+            return await _tagService.Delete(id,userId);
         }
 
         public async Task<TagDto> Get(string id)
@@ -32,9 +33,9 @@ namespace SHS.Application.TagAppService
             return _mapper.Map<TagDto>(await _tagService.Get(id));
         }
 
-        public async Task<IEnumerable<TagDto>> GetAll(QueryTagFilter filter)
+        public async Task<Base.PagedResultDto<TagDto>> GetAll(QueryTagFilter filter)
         {
-            var result = new List<TagDto>();
+            var result = new Base.PagedResultDto<TagDto>();
             var tags = await _tagService.GetAll(new Service.TagService.Dto.QueryTagFilter()
             {
                 name = filter.name,
@@ -43,16 +44,14 @@ namespace SHS.Application.TagAppService
                 limit = filter.limit,
                 Sort = filter.Sort,
             });
-            foreach (var item in tags)
-            {
-                result.Add(_mapper.Map<TagDto>(item));
-            }
+            result.Items = _mapper.Map<List<TagDto>>(tags.Items);
+            result.TotalCount = tags.TotalCount;
             return result;
         }
 
-        public async Task<Result> Update(EditTagDto tag)
+        public async Task<Result> Update(ModifyTagDto dto)
         {
-            return await _tagService.Update(_mapper.Map<Tag>(tag));
+            return await _tagService.Update(_mapper.Map<Tag>(dto));
         }
     }
 }

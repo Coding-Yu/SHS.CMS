@@ -11,12 +11,12 @@ namespace SHS.Service.RoleService
     {
         Task<Rolepermission> Get(string id);
 
-        Task<IEnumerable<Rolepermission>> GetAll(QueryRoleFilter filter);
+        Task<PagedResultDto<Rolepermission>> GetAll(QueryRoleFilter filter);
         Task<Result> Add(Rolepermission role);
 
         Task<Result> Update(Rolepermission role);
 
-        Task<Result> Delete(string id);
+        Task<Result> Delete(string id,string userId);
 
         Task<Result> RoleGivePermission(string roleid,IList<string> permissionIdss);
         Task<IList<Permission>> GetPermissionByRoleId(string id);

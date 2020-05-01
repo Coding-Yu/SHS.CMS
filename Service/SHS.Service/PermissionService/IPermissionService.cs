@@ -12,10 +12,10 @@ namespace SHS.Service.PermissionService
 
         Task<Permission> Get(string id);
 
-        Task<IEnumerable<Permission>> GetAll(QueryPermissionFilter filter);
+        Task<PagedResultDto<Permission>> GetAll(QueryPermissionFilter filter);
         Task<Result> Update(Permission permission);
 
-        Task<Result> Delete(string id);
+        Task<Result> Delete(string id, string userId);
 
     }
 }

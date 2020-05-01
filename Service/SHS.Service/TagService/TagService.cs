@@ -38,7 +38,7 @@ namespace SHS.Service.TagService
             }
         }
 
-        public async Task<Result> Delete(string id)
+        public async Task<Result> Delete(string id, string userId)
         {
             try
             {
@@ -47,6 +47,9 @@ namespace SHS.Service.TagService
                     var tag = await _tagRepository.GetByAsync(id);
                     if (tag != null)
                     {
+                        tag.DeleteDate = DateTime.Now;
+                        tag.DeleteUserId = Guid.Parse(userId);
+                        tag.IsDel = 1;
                         await _tagRepository.RemoveByAsync(tag);
                         return Result.Success(200);
                     }
@@ -77,17 +80,19 @@ namespace SHS.Service.TagService
             }
         }
 
-        public async Task<IEnumerable<Tag>> GetAll(QueryTagFilter filter)
+        public async Task<PagedResultDto<Tag>> GetAll(QueryTagFilter filter)
         {
-            var result = new List<Tag>();
+            var result = new PagedResultDto<Tag>();
             try
             {
                 var query = await _tagRepository.GetAllByAsync();
+                query = query.Where(x => x.IsDel == 0);
                 if (!string.IsNullOrWhiteSpace(filter.name))
                 {
                     query = query.Where(x => x.Name.Contains(filter.name));
                 }
-                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit).ToList();
+                result.TotalCount = query.Count();
+                result.Items = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit).ToList();
             }
             catch (Exception ex)
             {
@@ -102,6 +107,7 @@ namespace SHS.Service.TagService
             {
                 if (tag != null)
                 {
+                    tag.UpdateDate = DateTime.Now;
                     await _tagRepository.UpdateByAsync(tag);
                     return Result.Success();
                 }

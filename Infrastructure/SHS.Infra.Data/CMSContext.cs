@@ -69,8 +69,8 @@ namespace SHS.Infra.Data
             var roleId = Guid.NewGuid();
             var areaId = Guid.NewGuid();
             modelBuilder.Entity<Rolepermission>().HasData(new Rolepermission { ID = roleId, Name = "系统管理员", CreateDate = DateTime.Now, Remarks = "系统最高管理员" });
-            modelBuilder.Entity<Area>().HasData(new Area { ID = areaId, City = "长沙", CreateDate = DateTime.Now, Street = "解放西", CreateUserId = userId, State = "中国" });
-            modelBuilder.Entity<User>().HasData(new User { ID = userId, Name = "admin", CreateDate = DateTime.Now, Password = MD5Encrypt.EncryptBy32("123456"), Remarks = "管理员", RoleID = roleId, AreaID = areaId });
+            modelBuilder.Entity<Area>().HasData(new Area { ID = areaId, City = "长沙", CreateDate = DateTime.Now, Street = "解放西", CreateUserId = userId, State = "中国", Province = "湖南" });
+            modelBuilder.Entity<User>().HasData(new User { ID = userId, Name = "admin", CreateDate = DateTime.Now, Password = MD5Encrypt.EncryptBy32("123456"), Remarks = "管理员", RoleID = roleId, AreaID = areaId, Email = "1076372177@qq.com", Icon = "https://tse1-mm.cn.bing.net/th?id=OIP.VWs6ip-0SNpR7Yof8YYfCgAAAA&w=152&h=160&c=8&rs=1&qlt=90&pid=3.1&rm=2" });
         }
     }
 

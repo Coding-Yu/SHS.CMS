@@ -40,38 +40,27 @@ namespace API.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<JsonResult> Add(AddOrEditPermissionModel model)
+        public async Task<JsonResult> Add(AddPermissionDto model)
         {
-            var permission = new AddPermissionDto();
-            permission.Name = model.Name;
-            permission.Path = model.Path;
-            permission.Remarks = model.Remarks;
-            permission.CreateDate = DateTime.Now;
-            //permission.CreateUserId = 1; TODO 用户ID 
-            var result = await _permissionAppService.Add(permission);
+            var result = await _permissionAppService.Add(model);
             OutputModel outputModel = new OutputModel();
             outputModel.Data = result;
             return Json(outputModel);
         }
 
         [HttpPost("Update")]
-        public async Task<JsonResult> Update(AddOrEditPermissionModel model)
+        public async Task<JsonResult> Update(ModifyPermissionDto model)
         {
-            var permission = new ModifyPermissionDto();
-            permission.Name = model.Name;
-            permission.Path = model.Path;
-            permission.UpdateDate = DateTime.Now;
-            //permission.UpdateUserId = 1;//TODO 用户ID
-            var result = await _permissionAppService.Update(permission);
+            var result = await _permissionAppService.Update(model);
             OutputModel outputModel = new OutputModel();
             outputModel.Data = result;
             return Json(outputModel);
         }
 
         [HttpPost("Delete")]
-        public async Task<JsonResult> Delete(string id)
+        public async Task<JsonResult> Delete(string id, string userId)
         {
-            var result = await _permissionAppService.Delete(id);
+            var result = await _permissionAppService.Delete(id, userId);
             OutputModel outputModel = new OutputModel();
             outputModel.Data = result;
             return Json(outputModel);

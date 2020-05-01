@@ -12,7 +12,7 @@ namespace SHS.Application.RoleAppService.Dtos
     public class RoleDto : BaseDto
     {
         public string Name { get; set; }
-        public bool isDefault { get; set; }
+        public bool IsDefault { get; set; }
         
         public string Summary { get; set; }
     }

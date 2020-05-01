@@ -11,5 +11,7 @@ namespace API.Model.Category
         public string Name { get; set; }
 
         public string Summary { get; set; }
+
+        public string Remarks { get; set; }
     }
 }

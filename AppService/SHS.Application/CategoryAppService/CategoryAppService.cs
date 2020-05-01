@@ -19,14 +19,14 @@ namespace SHS.Application.CategoryAppService
             _mapper = mapper;
             _categoryService = categoryService;
         }
-        public async Task<Result> Add(AddCategoryDto category)
+        public async Task<Result> Add(AddCategoryDto dto)
         {
-            return await _categoryService.Add(_mapper.Map<Category>(category));
+            return await _categoryService.Add(_mapper.Map<Category>(dto));
         }
 
-        public async Task<Result> Delete(string id)
+        public async Task<Result> Delete(string id, string userId)
         {
-            return await _categoryService.Delete(id);
+            return await _categoryService.Delete(id,userId);
         }
 
         public async Task<CategoryDto> Get(string id)
@@ -34,9 +34,9 @@ namespace SHS.Application.CategoryAppService
             return _mapper.Map<CategoryDto>(await _categoryService.Get(id));
         }
 
-        public async Task<IEnumerable<CategoryDto>> GetAll(QueryCategoryFilter filter)
+        public async Task<Base.PagedResultDto<CategoryDto>> GetAll(QueryCategoryFilter filter)
         {
-            var result = new List<CategoryDto>();
+            var result = new Base.PagedResultDto<CategoryDto>();
             var categorys = await _categoryService.GetAll(new Service.CategoryService.Dto.QueryCategoryFilter()
             {
                 name = filter.name,
@@ -45,16 +45,14 @@ namespace SHS.Application.CategoryAppService
                 limit = filter.limit,
                 Sort = filter.Sort,
             });
-            foreach (var item in categorys)
-            {
-                result.Add(_mapper.Map<CategoryDto>(item));
-            }
+            result.Items = _mapper.Map<List<CategoryDto>>(categorys.Items);
+            result.TotalCount = categorys.TotalCount;
             return result;
         }
 
-        public async Task<Result> Update(ModifyCategoryDto category)
+        public async Task<Result> Update(ModifyCategoryDto dto)
         {
-            return await _categoryService.Update(_mapper.Map<Category>(category));
+            return await _categoryService.Update(_mapper.Map<Category>(dto));
         }
     }
 }

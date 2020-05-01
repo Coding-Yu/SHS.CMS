@@ -43,37 +43,27 @@ namespace API.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<JsonResult> Add(AddOrEditCategoryModel model )
+        public async Task<JsonResult> Add(AddCategoryDto model )
         {
-            AddCategoryDto category = new AddCategoryDto();
-            category.Name = model.Name;
-            category.Summary = model.Summary;
-            category.CreateDate = DateTime.Now;
-            //TODO 用户ID category.CreateUserId = 1;
-            var result = await _categoryAppService.Add(category);
+            var result = await _categoryAppService.Add(model);
             OutputModel outputModel = new OutputModel();
             outputModel.Data = result;
             return new JsonResult(outputModel);
         }
 
         [HttpPost("Update")]
-        public async Task<JsonResult> Update(AddOrEditCategoryModel model)
+        public async Task<JsonResult> Update(ModifyCategoryDto model)
         {
-            ModifyCategoryDto category = new ModifyCategoryDto();
-            category.Name = model.Name;
-            category.Summary = model.Summary;
-            category.UpdateDate = DateTime.Now;
-            // TODO 用户ID category.UpdateUserId = 1;
-            var result = await _categoryAppService.Update(category);
+            var result = await _categoryAppService.Update(model);
             OutputModel outputModel = new OutputModel();
             outputModel.Data = result;
             return new JsonResult(outputModel);
         }
 
         [HttpPost("Delete")]
-        public async Task<JsonResult> Delete(string id)
+        public async Task<JsonResult> Delete(string id,string userId)
         {
-            var result = await _categoryAppService.Delete(id);
+            var result = await _categoryAppService.Delete(id,userId);
             OutputModel outputModel = new OutputModel();
             outputModel.Data = result;
             return new JsonResult(outputModel);

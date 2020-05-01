@@ -39,15 +39,18 @@ namespace SHS.Service.ArticleService
             }
         }
 
-        public async Task<Result> Delete(string id)
+        public async Task<Result> Delete(string id,string userId)
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(id))
+                if (!string.IsNullOrWhiteSpace(id)&&!string.IsNullOrWhiteSpace(userId))
                 {
                     var article = await _articleRepository.GetByAsync(id);
                     if (article != null)
                     {
+                        article.DeleteDate = DateTime.Now;
+                        article.IsDel = 1;
+                        article.DeleteUserId =Guid.Parse(userId);
                         await _articleRepository.RemoveByAsync(article);
                         return Result.Success(200);
                     }
@@ -78,17 +81,19 @@ namespace SHS.Service.ArticleService
             }
         }
 
-        public async Task<IEnumerable<Article>> GetAll(QueryArticleFilter filter)
+        public async Task<PagedResultDto<Article>> GetAll(QueryArticleFilter filter)
         {
-            var result = new List<Article>();
+            var result = new PagedResultDto<Article>();
             try
             {
                 var query = await _articleRepository.GetAllByAsync();
+                query = query.Where(x => x.IsDel == 0);
                 if (!string.IsNullOrWhiteSpace(filter.title))
                 {
                     query = query.Where(x => x.Title.Contains(filter.title));
                 }
-                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit).ToList();
+                result.Items = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit).ToList();
+                result.TotalCount = query.Count();
             }
             catch (Exception ex)
             {
@@ -103,6 +108,7 @@ namespace SHS.Service.ArticleService
             {
                 if (article != null)
                 {
+                    article.UpdateDate = DateTime.Now;
                     await _articleRepository.UpdateByAsync(article);
                     return Result.Success();
                 }

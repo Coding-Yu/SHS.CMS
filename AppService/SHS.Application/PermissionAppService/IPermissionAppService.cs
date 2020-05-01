@@ -11,9 +11,9 @@ namespace SHS.Application.PermissionAppService
 
         Task<PermissionDto> Get(string id);
 
-        Task<IEnumerable<PermissionDto>> GetAll( QueryPermissionFilter filter);
+        Task<Base.PagedResultDto<PermissionDto>> GetAll( QueryPermissionFilter filter);
         Task<Result> Update(ModifyPermissionDto permiision);
 
-        Task<Result> Delete(string id);
+        Task<Result> Delete(string id, string userId);
     }
 }

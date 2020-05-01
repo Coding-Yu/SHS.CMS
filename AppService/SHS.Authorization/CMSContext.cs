@@ -1,19 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using SHS.Infra.Data.Users;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using DbContext = Microsoft.EntityFrameworkCore.DbContext;
 
 namespace SHS.Authorization
 {
     public class CMSContext : DbContext
     {
-        public DbSet<User> Users { get; set; }
+        public Microsoft.EntityFrameworkCore.DbSet<User> Users { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=.;uid=sa;pwd=123456;database=SHS.CMS;");
+            var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("SHSCMSDB"));
         }
     }
 }

@@ -15,40 +15,57 @@ namespace SHS.Infra.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("SHS.Domain.Core.Area.Area", b =>
                 {
                     b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("City");
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreateDate");
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreateUserId");
+                    b.Property<Guid>("CreateUserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DeleteDate");
+                    b.Property<DateTime>("DeleteDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("DeleteUserId");
+                    b.Property<Guid>("DeleteUserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("IsDel");
+                    b.Property<int>("IsDel")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Remarks");
+                    b.Property<string>("Province")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("Sort");
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("State");
+                    b.Property<long>("Sort")
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("Street");
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdateDate");
+                    b.Property<string>("Street")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UpdateUserId");
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("ZipCode");
+                    b.Property<Guid>("UpdateUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -57,13 +74,14 @@ namespace SHS.Infra.Data.Migrations
                     b.HasData(
                         new
                         {
-                            ID = new Guid("922d74f6-898c-4aec-9bc1-c131fcab6c13"),
+                            ID = new Guid("f33e48b4-a86d-4f23-84b9-8855a3e477bd"),
                             City = "长沙",
-                            CreateDate = new DateTime(2020, 2, 17, 2, 41, 51, 863, DateTimeKind.Local).AddTicks(561),
-                            CreateUserId = new Guid("af68b4f9-896e-41a6-92db-82009ebdbc59"),
+                            CreateDate = new DateTime(2020, 4, 30, 17, 17, 38, 869, DateTimeKind.Local).AddTicks(8379),
+                            CreateUserId = new Guid("9033b48d-f1fc-4811-b8f7-5871cccedddd"),
                             DeleteDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeleteUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             IsDel = 0,
+                            Province = "湖南",
                             Sort = 0L,
                             State = "中国",
                             Street = "解放西",
@@ -75,33 +93,50 @@ namespace SHS.Infra.Data.Migrations
             modelBuilder.Entity("SHS.Domain.Core.Articles.Article", b =>
                 {
                     b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CategoryId");
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreateDate");
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreateUserId");
+                    b.Property<Guid>("CreateUserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DeleteDate");
+                    b.Property<DateTime>("DeleteDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("DeleteUserId");
+                    b.Property<Guid>("DeleteUserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("IsDel");
+                    b.Property<int>("IsDel")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Remarks");
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("Sort");
+                    b.Property<long>("Sort")
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("SourceLink");
+                    b.Property<string>("SourceLink")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Summary")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdateDate");
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UpdateUserId");
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UpdateUserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
 
@@ -113,29 +148,41 @@ namespace SHS.Infra.Data.Migrations
             modelBuilder.Entity("SHS.Domain.Core.Categorys.Category", b =>
                 {
                     b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreateDate");
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreateUserId");
+                    b.Property<Guid>("CreateUserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DeleteDate");
+                    b.Property<DateTime>("DeleteDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("DeleteUserId");
+                    b.Property<Guid>("DeleteUserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("IsDel");
+                    b.Property<int>("IsDel")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Remarks");
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("Sort");
+                    b.Property<long>("Sort")
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("Summary");
+                    b.Property<string>("Summary")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdateDate");
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UpdateUserId");
+                    b.Property<Guid>("UpdateUserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
 
@@ -145,29 +192,41 @@ namespace SHS.Infra.Data.Migrations
             modelBuilder.Entity("SHS.Domain.Core.Permissions.Permission", b =>
                 {
                     b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreateDate");
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreateUserId");
+                    b.Property<Guid>("CreateUserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DeleteDate");
+                    b.Property<DateTime>("DeleteDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("DeleteUserId");
+                    b.Property<Guid>("DeleteUserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("IsDel");
+                    b.Property<int>("IsDel")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Path");
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Remarks");
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("Sort");
+                    b.Property<long>("Sort")
+                        .HasColumnType("bigint");
 
-                    b.Property<DateTime>("UpdateDate");
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UpdateUserId");
+                    b.Property<Guid>("UpdateUserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
 
@@ -176,11 +235,14 @@ namespace SHS.Infra.Data.Migrations
 
             modelBuilder.Entity("SHS.Domain.Core.Permissions.RolePermission", b =>
                 {
-                    b.Property<Guid>("RoleId");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PermissionId");
+                    b.Property<Guid>("PermissionId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ID");
+                    b.Property<Guid>("ID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("RoleId", "PermissionId");
 
@@ -189,34 +251,47 @@ namespace SHS.Infra.Data.Migrations
                     b.ToTable("SHS.CMS.RolePermission");
                 });
 
-            modelBuilder.Entity("SHS.Domain.Core.Roles.Role", b =>
+            modelBuilder.Entity("SHS.Domain.Core.Roles.Rolepermission", b =>
                 {
                     b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreateDate");
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreateUserId");
+                    b.Property<Guid>("CreateUserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DeleteDate");
+                    b.Property<DateTime>("DeleteDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("DeleteUserId");
+                    b.Property<Guid>("DeleteUserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDefault");
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
 
-                    b.Property<int>("IsDel");
+                    b.Property<int>("IsDel")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Remarks");
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("Sort");
+                    b.Property<long>("Sort")
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("Summary");
+                    b.Property<string>("Summary")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdateDate");
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UpdateUserId");
+                    b.Property<Guid>("UpdateUserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
 
@@ -225,8 +300,8 @@ namespace SHS.Infra.Data.Migrations
                     b.HasData(
                         new
                         {
-                            ID = new Guid("2fbe8d77-c2a2-45ba-b39a-6363121a1578"),
-                            CreateDate = new DateTime(2020, 2, 17, 2, 41, 51, 862, DateTimeKind.Local).AddTicks(1005),
+                            ID = new Guid("d8ee3b97-8f33-43ef-89d9-63243aedd30e"),
+                            CreateDate = new DateTime(2020, 4, 30, 17, 17, 38, 867, DateTimeKind.Local).AddTicks(9871),
                             CreateUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             DeleteDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeleteUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -242,11 +317,14 @@ namespace SHS.Infra.Data.Migrations
 
             modelBuilder.Entity("SHS.Domain.Core.Tags.ArticleTag", b =>
                 {
-                    b.Property<Guid>("ArticleId");
+                    b.Property<Guid>("ArticleId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("TagId");
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ID");
+                    b.Property<Guid>("ID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ArticleId", "TagId");
 
@@ -258,29 +336,41 @@ namespace SHS.Infra.Data.Migrations
             modelBuilder.Entity("SHS.Domain.Core.Tags.Tag", b =>
                 {
                     b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreateDate");
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreateUserId");
+                    b.Property<Guid>("CreateUserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DeleteDate");
+                    b.Property<DateTime>("DeleteDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("DeleteUserId");
+                    b.Property<Guid>("DeleteUserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("IsDel");
+                    b.Property<int>("IsDel")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Remarks");
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("Sort");
+                    b.Property<long>("Sort")
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("Summary");
+                    b.Property<string>("Summary")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdateDate");
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UpdateUserId");
+                    b.Property<Guid>("UpdateUserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
 
@@ -290,43 +380,71 @@ namespace SHS.Infra.Data.Migrations
             modelBuilder.Entity("SHS.Infra.Data.Users.User", b =>
                 {
                     b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Age");
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("AreaID");
+                    b.Property<Guid>("AreaID")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreateDate");
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreateUserId");
+                    b.Property<Guid>("CreateUserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DeleteDate");
+                    b.Property<DateTime>("DeleteDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("DeleteUserId");
+                    b.Property<Guid>("DeleteUserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("DetailAddress");
+                    b.Property<int>("DetailAddress")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IsDel");
+                    b.Property<string>("Icon")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name");
+                    b.Property<int>("IsDel")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Password");
+                    b.Property<DateTime>("LastLoginDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Phone");
+                    b.Property<string>("LastLoginIp")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Remarks");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("RoleID");
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Sex");
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("Sort");
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdateDate");
+                    b.Property<Guid>("RoleID")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UpdateUserId");
+                    b.Property<int>("Sex")
+                        .HasColumnType("int");
+
+                    b.Property<long>("Sort")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UpdateUserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
 
@@ -339,19 +457,22 @@ namespace SHS.Infra.Data.Migrations
                     b.HasData(
                         new
                         {
-                            ID = new Guid("af68b4f9-896e-41a6-92db-82009ebdbc59"),
+                            ID = new Guid("9033b48d-f1fc-4811-b8f7-5871cccedddd"),
                             Age = 0,
-                            AreaID = new Guid("922d74f6-898c-4aec-9bc1-c131fcab6c13"),
-                            CreateDate = new DateTime(2020, 2, 17, 2, 41, 51, 863, DateTimeKind.Local).AddTicks(2811),
+                            AreaID = new Guid("f33e48b4-a86d-4f23-84b9-8855a3e477bd"),
+                            CreateDate = new DateTime(2020, 4, 30, 17, 17, 38, 870, DateTimeKind.Local).AddTicks(943),
                             CreateUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             DeleteDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeleteUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             DetailAddress = 0,
+                            Email = "1076372177@qq.com",
+                            Icon = "https://tse1-mm.cn.bing.net/th?id=OIP.VWs6ip-0SNpR7Yof8YYfCgAAAA&w=152&h=160&c=8&rs=1&qlt=90&pid=3.1&rm=2",
                             IsDel = 0,
+                            LastLoginDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "admin",
                             Password = "e1adc3949ba59abbe56e057f2f883e",
                             Remarks = "管理员",
-                            RoleID = new Guid("2fbe8d77-c2a2-45ba-b39a-6363121a1578"),
+                            RoleID = new Guid("d8ee3b97-8f33-43ef-89d9-63243aedd30e"),
                             Sex = 0,
                             Sort = 0L,
                             UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -364,7 +485,8 @@ namespace SHS.Infra.Data.Migrations
                     b.HasOne("SHS.Domain.Core.Categorys.Category", "Category")
                         .WithMany("Article")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SHS.Domain.Core.Permissions.RolePermission", b =>
@@ -372,12 +494,14 @@ namespace SHS.Infra.Data.Migrations
                     b.HasOne("SHS.Domain.Core.Permissions.Permission", "Permission")
                         .WithMany("RolePermissions")
                         .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("SHS.Domain.Core.Roles.Role", "role")
+                    b.HasOne("SHS.Domain.Core.Roles.Rolepermission", "role")
                         .WithMany("RolePermissions")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SHS.Domain.Core.Tags.ArticleTag", b =>
@@ -385,12 +509,14 @@ namespace SHS.Infra.Data.Migrations
                     b.HasOne("SHS.Domain.Core.Articles.Article", "Article")
                         .WithMany("ArticleTag")
                         .HasForeignKey("ArticleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SHS.Domain.Core.Tags.Tag", "Tag")
                         .WithMany("ArticleTag")
                         .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SHS.Infra.Data.Users.User", b =>
@@ -398,12 +524,14 @@ namespace SHS.Infra.Data.Migrations
                     b.HasOne("SHS.Domain.Core.Area.Area", "Area")
                         .WithMany()
                         .HasForeignKey("AreaID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("SHS.Domain.Core.Roles.Role", "Role")
+                    b.HasOne("SHS.Domain.Core.Roles.Rolepermission", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

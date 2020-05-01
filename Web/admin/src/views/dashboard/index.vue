@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="top">控制面板</div>
-    <div class="dashboard-text">name: {{ name }}</div>
+    <div class="dashboard-text">name: {{ name }} </div>
   </div>
 </template>
 

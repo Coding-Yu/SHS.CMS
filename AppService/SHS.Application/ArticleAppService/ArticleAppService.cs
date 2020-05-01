@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using SHS.Application.ArticleAppService.Dtos;
+using SHS.Application.Base;
 using SHS.Domain.Core.Articles;
 using SHS.Service.ArticleService;
 using SHS.Service.Interfaces;
@@ -20,24 +21,26 @@ namespace SHS.Application.ArticleAppService
             _articleService = articleService;
             _mapper = mapper;
         }
-        public async Task<Result> Add(AddArticleDto article)
+        public async Task<Result> Add(AddArticleDto dto)
         {
-            return await _articleService.Add(_mapper.Map<Article>(article));
+            return await _articleService.Add(_mapper.Map<Article>(dto));
         }
 
-        public async Task<Result> Delete(string id)
+        public async Task<Result> Delete(string id,string userId)
         {
-            return await _articleService.Delete(id);
+            return await _articleService.Delete(id, userId);
         }
 
         public async Task<ArticleDto> Get(string id)
         {
-            return _mapper.Map<ArticleDto>(await _articleService.Get(id));
+            var entity = await _articleService.Get(id);
+            var result =_mapper.Map<ArticleDto>(entity);
+            return result;
         }
 
-        public async Task<IEnumerable<ArticleDto>> GetAll(QueryArticleFilter filter)
+        public async Task<Base.PagedResultDto<ArticleDto>> GetAll(QueryArticleFilter filter)
         {
-            var result = new List<ArticleDto>();
+            var result = new Base.PagedResultDto<ArticleDto>();
             var articles = await _articleService.GetAll(new Service.ArticleService.Dto.QueryArticleFilter()
             {
                 PageCount = filter.PageCount,
@@ -46,16 +49,15 @@ namespace SHS.Application.ArticleAppService
                 Sort = filter.Sort,
                 title = filter.title,
             });
-            foreach (var item in articles)
-            {
-                result.Add(_mapper.Map<ArticleDto>(item));
-            }
+           
+            result.Items =_mapper.Map<List<ArticleDto>>(articles.Items);
+            result.TotalCount = articles.TotalCount;
             return result;
         }
 
-        public async Task<Result> Update(ModifyArticleDto article)
+        public async Task<Result> Update(ModifyArticleDto dto)
         {
-            return await _articleService.Update(_mapper.Map<Article>(article));
+            return await _articleService.Update(_mapper.Map<Article>(dto));
         }
     }
 }

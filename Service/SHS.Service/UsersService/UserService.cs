@@ -8,6 +8,7 @@ using SHS.Service.UsersService.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace SHS.Service.UsersService
@@ -29,7 +30,7 @@ namespace SHS.Service.UsersService
             {
                 if (user != null)
                 {
-                    //TODO 参数转换user
+                    user.CreateDate = DateTime.Now;
                     await _repository.AddByAsync(user);
                     return Result.Success(200);
                 }
@@ -42,15 +43,18 @@ namespace SHS.Service.UsersService
             }
         }
 
-        public async Task<Result> Delete(string id)
+        public async Task<Result> Delete(string id, string userId)
         {
             try
             {
                 if (!string.IsNullOrEmpty(id.ToString()))
                 {
-                    var entity = _repository.Get(Guid.Parse(id));
+                    var entity = _repository.Get(id);
                     if (entity != null)
                     {
+                        entity.IsDel = 1;
+                        entity.DeleteDate = DateTime.Now;
+                        entity.DeleteUserId =Guid.Parse(userId);
                         var result = await _repository.RemoveByAsync(entity);
                         if (result > 0)
                         {
@@ -93,9 +97,11 @@ namespace SHS.Service.UsersService
                 var query = _repository.GetAll();
                 if (!string.IsNullOrWhiteSpace(filter.Name))
                 {
-                    query = query.Where(x => x.Name == filter.Name  || x.Phone == filter.Phone);
+                    query = query.Where(x => x.Name == filter.Name || x.Phone == filter.Phone);
                 }
-                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit).ToList();
+                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit)
+                    .ToList();
+                // TODO 密码转换
             }
             catch (Exception ex)
             {
@@ -103,12 +109,13 @@ namespace SHS.Service.UsersService
             }
             return result;
         }
-        public async Task<IEnumerable<User>> GetAllByAsync(QueryUserFilter filter)
+        public async Task<PagedResultDto<User>> GetAllByAsync(QueryUserFilter filter)
         {
-            var result = new List<User>();
+            var result = new PagedResultDto<User>();
             try
             {
                 var query = await _repository.GetAllByAsync();
+                query = query.Where(x => x.IsDel == 0);
                 if (!string.IsNullOrWhiteSpace(filter.Name))
                 {
                     query = query.Where(x => x.Name == filter.Name);
@@ -117,7 +124,8 @@ namespace SHS.Service.UsersService
                 {
                     query = query.Where(x => x.Phone == filter.Phone);
                 }
-                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit).ToList();
+                result.TotalCount = query.Count();
+                result.Items = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit).ToList();
             }
             catch (Exception ex)
             {
@@ -150,6 +158,7 @@ namespace SHS.Service.UsersService
             {
                 if (user != null)
                 {
+                    user.UpdateDate = DateTime.Now;
                     var result = await _repository.UpdateByAsync(user);
                     if (result > 0)
                     {

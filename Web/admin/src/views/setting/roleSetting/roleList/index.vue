@@ -42,7 +42,7 @@
       </el-table-column>
     </el-table>
 
-    <el-pagination
+    <Pagination
       background
       v-show="total>0"
       :total="total"
@@ -102,9 +102,14 @@
 //, add, update, remove, setPermission
 import { getRoleList, add, update, remove, setPermission, getPermissionByRoleId } from '@/api/role'
 import { getPermissionList } from '@/api/permission'
+import store from '@/store'
+import Pagination from '@/components/Pagination'
 export default {
+  name: 'RoleTable',
+  components: { Pagination },
   data() {
     return {
+      userId: store.state.user.userId,
       tableData: [],
       list: null,
       total: 0,
@@ -156,8 +161,8 @@ export default {
     getList() {
       this.listLoading = true
       getRoleList(this.listQuery).then(response => {
-        this.tableData = response.data
-        this.total = 1
+        this.tableData = response.data.items
+        this.total = response.data.totalCount
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
@@ -167,11 +172,11 @@ export default {
       getPermissionList(this.permissionListQuery).then(permission => {
         getPermissionByRoleId(row.id).then(permissionByRole => {
           if (permissionByRole.data.length <= 0) {
-            permission.data.forEach(permissionItems => {
+            permission.data.items.forEach(permissionItems => {
               this.permissionList.push({ id: permissionItems.id, title: permissionItems.name, ischeck: false })
             })
           } else {
-            permission.data.forEach(permissionItems => {
+            permission.data.items.forEach(permissionItems => {
               permissionByRole.data.forEach(permissionByRoleItems => {
                 console.log('权限ID', permissionItems.id, '拥有ID', permissionByRoleItems.id)
                 if (permissionItems.id === permissionByRoleItems.id) {
@@ -217,6 +222,8 @@ export default {
     createData() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
+          this.temp.id = undefined
+          this.temp.createUserId = this.userId
           add(this.temp).then(() => {
             this.dialogFormVisible = false
             this.$notify({
@@ -233,6 +240,7 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
+          this.temp.updateUserId = this.userId
           const tempData = Object.assign({}, this.temp)
           update(tempData).then(() => {
             this.dialogFormVisible = false
@@ -248,7 +256,7 @@ export default {
       })
     },
     handlDeleteData(row) {
-      remove(row.id).then(() => {
+      remove(row.id, this.userId).then(() => {
         this.$notify({
           title: '提示',
           message: '删除成功',

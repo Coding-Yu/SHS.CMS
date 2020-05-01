@@ -9,39 +9,40 @@ namespace SHS.Authorization
 {
     public class Startup
     {
-        public IHostingEnvironment Environment { get; }
-
-        public Startup(IHostingEnvironment environment)
-        {
-            Environment = environment;
-        }
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<CMSContext>(option => option.UseSqlServer(@"Server=.\sqlexpress;uid=sa;pwd=123456;database=SHS.CMS;"));
-            var builder = services.AddIdentityServer()
-                // .AddInMemoryIdentityResources(Config.GetIdentityResources())
-                .AddInMemoryApiResources(Config.GetApis())
+            // configure identity server with in-memory stores, keys, clients and scopes
+            services.AddIdentityServer()
+                .AddDeveloperSigningCredential()
+                .AddInMemoryIdentityResources(Config.GetIdentityResourceResources())
+                .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients())
-                .AddTestUsers(Config.GetUsers()); ;
-            if (Environment.IsDevelopment())
+                .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
+                .AddProfileService<ProfileService>();
+            services.AddCors(options =>
             {
-                builder.AddDeveloperSigningCredential();
-            }
-            else
-            {
-                throw new Exception("need to configure key material");
-            }
-        }
+                options.AddPolicy("any", builder =>
+                {
+                    builder.AllowAnyOrigin(); //允许任何来源的主机访问
+                    builder.WithOrigins("http://localhost:5000") ////允许http://localhost:8080的主机访问
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();//指定处理cookie
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+                });
+            });
+            //services.AddDbContext<CMSContext>(options =>
+            //        options.UseSqlServer(Configuration.GetConnectionString("SqlServerContext")));
+        }
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+            //配置跨域处理，允许所有来源：
+            app.UseCors("any");
             app.UseIdentityServer();
         }
     }

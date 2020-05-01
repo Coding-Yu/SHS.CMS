@@ -17,6 +17,12 @@ namespace SHS.Domain.Core.Area
         /// 城市
         /// </summary>
         public string City { get; set; }
+
+        /// <summary>
+        /// 省份
+        /// </summary>
+        public string Province { get; set; }
+        
         /// <summary>
         /// 国家/州
         /// </summary>

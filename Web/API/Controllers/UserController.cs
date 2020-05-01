@@ -42,59 +42,28 @@ namespace API.Controllers
             return new JsonResult(result);
         }
         [HttpPost("Add")]
-        public async Task<JsonResult> Add(AddOrEditUserModel model)
+        public async Task<JsonResult> Add(AddUserDto model)
         {
-            //TODO CreateUserId当前用户人
-            var area = new Area();
-            var user = new UserDto();
-            user.Password = model.Password;
-            user.Name = model.Name;
-            user.Phone = model.Phone;
-            user.RoleID = Guid.Parse(model.RoleID);
-            user.Sex = model.Sex;
-            user.Age = model.Age;
-            user.Area = area;
-            user.Email = model.Email;
-            user.CreateDate = DateTime.Now;
-            var result = await _userAppService.AddUser(user);
+            var result = await _userAppService.AddUser(model);
             OutputModel outputModel = new OutputModel();
             outputModel.Data = result;
             return new JsonResult(outputModel);
         }
         [HttpPost("Update")]
-        public async Task<JsonResult> Update(AddOrEditUserModel model)
+        public async Task<JsonResult> Update(ModifyUserDto model)
         {
-            var area = new Area();
-            var user = new UserDto();
-            user.Password = model.Password;
-            user.Name = model.Name;
-            user.Phone = model.Phone;
-            user.RoleID = Guid.Parse(model.RoleID);
-            user.Sex = model.Sex;
-            user.Age = model.Age;
-            user.Area = area;
-            user.Email = model.Email;
-            user.UpdateDate = DateTime.Now;
-            user.ID =Guid.Parse(model.Id.ToUpper());
-            //user.Area = area;user.UpdateUserId='';
-            // TODO 传递后进行赋值
-            var result = await _userAppService.UpdateUser(user);
+            var result = await _userAppService.UpdateUser(model);
             OutputModel outputModel = new OutputModel();
             outputModel.Data = result;
             return new JsonResult(outputModel);
         }
         [HttpGet("Delete")]
-        public async Task<JsonResult> Delete(string id)
+        public async Task<JsonResult> Delete(string id, string userId)
         {
-            var result = await _userAppService.Delete(id);
+            var result = await _userAppService.Delete(id, userId);
             OutputModel outputModel = new OutputModel();
             outputModel.Data = result;
             return new JsonResult(outputModel);
-        }
-        [HttpPost("GetUserInfo")]
-        public async Task<JsonResult> GetUserInfo(GetUserInfoModel model)
-        {
-            return new JsonResult(await _userAppService.GetUserInfo(model.Username, model.Password));
         }
     }
 }

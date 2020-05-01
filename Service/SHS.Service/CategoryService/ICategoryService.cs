@@ -9,9 +9,9 @@ namespace SHS.Service.CategoryService
     public interface ICategoryService
     {
         Task<Result> Add(Category category);
-        Task<IEnumerable<Category>> GetAll(QueryCategoryFilter filter);
+        Task<PagedResultDto<Category>> GetAll(QueryCategoryFilter filter);
         Task<Result> Update(Category category);
         Task<Category> Get(string id);
-        Task<Result> Delete(string id);
+        Task<Result> Delete(string id, string userId);
     }
 }

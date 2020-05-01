@@ -22,14 +22,14 @@ namespace SHS.Application.UserAppService
             _mapper = mapper;
         }
 
-        public async Task<Result> AddUser(UserDto input)
+        public async Task<Result> AddUser(AddUserDto input)
         {
             return await _userService.Add(_mapper.Map<User>(input));
         }
 
-        public async Task<Result> Delete(string id)
+        public async Task<Result> Delete(string id,string userId)
         {
-            return await _userService.Delete(id);
+            return await _userService.Delete(id,userId);
         }
 
         public IEnumerable<UserDto> GetAll(QueryUserFilter filter)
@@ -50,9 +50,9 @@ namespace SHS.Application.UserAppService
             }
             return result;
         }
-        public async Task<IEnumerable<UserDto>> GetAllByAsync(QueryUserFilter filter)
+        public async Task<Base.PagedResultDto<UserDto>> GetAllByAsync(QueryUserFilter filter)
         {
-            var result = new List<UserDto>();
+            var result = new Base.PagedResultDto<UserDto>();
             var users = await _userService.GetAllByAsync(new Service.UsersService.Dto.QueryUserFilter()
             {
                 Name = filter.name,
@@ -62,10 +62,8 @@ namespace SHS.Application.UserAppService
                 Phone = filter.phone,
                 Sort = filter.Sort,
             });
-            foreach (var item in users)
-            {
-                result.Add(_mapper.Map<UserDto>(item));
-            }
+            result.Items =_mapper.Map<List<UserDto>>(users.Items);
+            result.TotalCount = users.TotalCount;
             return result;
         }
         public async Task<UserDto> GetUser(string id)
@@ -73,17 +71,12 @@ namespace SHS.Application.UserAppService
             return _mapper.Map<UserDto>(await _userService.Get(id));
         }
 
-        public async Task<UserDto> GetUserInfo(string name, string password)
-        {
-            return  _mapper.Map<UserDto>(await _userService.GetUserInfo(name, password));
-        }
-
         public async Task<Result> SetRole(string userId, string roleId)
         {
             return await _userService.UserGiveRole(userId, roleId);
         }
 
-        public async Task<Result> UpdateUser(UserDto input)
+        public async Task<Result> UpdateUser(ModifyUserDto input)
         {
             return await _userService.Update(_mapper.Map<User>(input));
         }

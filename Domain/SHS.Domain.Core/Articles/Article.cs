@@ -16,6 +16,8 @@ namespace SHS.Domain.Core.Articles
 
         public string SourceLink { get; set; }
 
+        public string Summary { get; set; }
+
         public Category Category { get; set; }
         public Guid CategoryId { get; set; }
 

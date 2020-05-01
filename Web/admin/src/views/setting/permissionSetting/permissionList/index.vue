@@ -38,8 +38,7 @@
       </el-table-column>
     </el-table>
 
-    <el-pagination
-      background
+   <Pagination
       v-show="total>0"
       :total="total"
       :page.sync="listQuery.page"
@@ -75,9 +74,14 @@
 </template>
 <script>
 import { getPermissionList, update, add, remove } from '@/api/permission'
+import store from '@/store'
+import Pagination from '@/components/Pagination'
 export default {
+  name: 'PermissionTable',
+  components: { Pagination },
   data() {
     return {
+      userId: store.state.user.userId,
       tableData: [],
       listLoading: true,
       total: 0,
@@ -112,9 +116,8 @@ export default {
     getList() {
       this.listLoading = true
       getPermissionList(this.listQuery).then(response => {
-        console.log(response.data)
-        this.tableData = response.data
-        this.total = 1
+        this.tableData = response.data.items
+        this.total = response.data.totalCount
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
@@ -151,6 +154,8 @@ export default {
     createData() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
+          this.temp.createUserId = this.userId
+          this.temp.id = undefined
           add(this.temp).then(() => {
             this.dialogFormVisible = false
             this.$notify({
@@ -167,7 +172,9 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
+          this.temp.updateUserId = this.userId
           const tempData = Object.assign({}, this.temp)
+          console.log(tempData)
           update(tempData).then(() => {
             this.dialogFormVisible = false
             this.$notify({
@@ -182,7 +189,7 @@ export default {
       })
     },
     handlDeleteData(row) {
-      remove(row.id).then(() => {
+      remove(row.id, this.userId).then(() => {
         this.$notify({
           title: '提示',
           message: '删除成功',

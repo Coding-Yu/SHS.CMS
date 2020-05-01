@@ -37,13 +37,20 @@ namespace SHS.Service.PermissionService
             }
         }
 
-        public async Task<Result> Delete(string id)
+        public async Task<Result> Delete(string id, string userId)
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(id))
+                if (!string.IsNullOrWhiteSpace(id) && !string.IsNullOrWhiteSpace(userId))
                 {
-                    await _permissionRepository.RemoveByAsync(Guid.Parse(id));
+                    var permission = await _permissionRepository.GetByAsync(id);
+                    if (permission != null)
+                    {
+                        permission.IsDel = 1;
+                        permission.DeleteDate = DateTime.Now;
+                        permission.DeleteUserId = Guid.Parse(userId);
+                        await _permissionRepository.RemoveByAsync(permission);
+                    }
                     return Result.Success(200);
                 }
                 return Result.Fail(500);
@@ -72,17 +79,19 @@ namespace SHS.Service.PermissionService
             }
         }
 
-        public async Task<IEnumerable<Permission>> GetAll(QueryPermissionFilter filter)
+        public async Task<PagedResultDto<Permission>> GetAll(QueryPermissionFilter filter)
         {
-            var result = new List<Permission>();
+            var result = new PagedResultDto<Permission>();
             try
             {
                 var query = await _permissionRepository.GetAllByAsync();
+                query = query.Where(x => x.IsDel == 0);
                 if (!string.IsNullOrWhiteSpace(filter.name))
                 {
                     query = query.Where(x => x.Name == filter.name);
                 }
-                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit).ToList();
+                result.TotalCount = query.Count();
+                result.Items = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit).ToList();
             }
             catch (Exception ex)
             {
@@ -95,8 +104,9 @@ namespace SHS.Service.PermissionService
         {
             try
             {
-                if (permission!=null)
+                if (permission != null)
                 {
+                    permission.UpdateDate = DateTime.Now;
                     await _permissionRepository.UpdateByAsync(permission);
                     Result.Success(200);
                 }

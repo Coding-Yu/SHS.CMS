@@ -20,7 +20,7 @@ namespace API.Controllers
         {
             _tagAppService = tagAppService;
         }
-       
+
 
         [HttpPost("GetList")]
         public async Task<JsonResult> GetList()
@@ -45,38 +45,27 @@ namespace API.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<JsonResult> Add(AddOrEditTagModel model)
+        public async Task<JsonResult> Add(AddTagDto model)
         {
-            AddTagDto tag = new AddTagDto();
-            tag.Name = model.Name;
-            tag.Summary = model.Summary;
-            tag.CreateDate = DateTime.Now;
-            // TODO 用户ID tag.CreateUserId = 1;
-            var result = await _tagAppService.Add(tag);
+            var result = await _tagAppService.Add(model);
             OutputModel outputModel = new OutputModel();
             outputModel.Data = result;
             return new JsonResult(outputModel);
         }
 
         [HttpPost("Update")]
-        public async Task<JsonResult> Update(AddOrEditTagModel model)
+        public async Task<JsonResult> Update(ModifyTagDto model)
         {
-            EditTagDto tag = new EditTagDto();
-
-            tag.Name = model.Name;
-            tag.Summary = model.Summary;
-            tag.UpdateDate = DateTime.Now;
-            // TODO 用户IDtag.UpdateUserId=1;
-            var result = await _tagAppService.Update(tag);
+            var result = await _tagAppService.Update(model);
             OutputModel outputModel = new OutputModel();
             outputModel.Data = result;
             return new JsonResult(outputModel);
         }
 
         [HttpPost("Delete")]
-        public async Task<JsonResult> Delete(string id)
+        public async Task<JsonResult> Delete(string id, string userId)
         {
-            var result = await _tagAppService.Delete(id);
+            var result = await _tagAppService.Delete(id, userId);
             OutputModel outputModel = new OutputModel();
             outputModel.Data = result;
             return new JsonResult(outputModel);

@@ -51,14 +51,17 @@ namespace SHS.Service.RoleService
             }
         }
 
-        public async Task<Result> Delete(string id)
+        public async Task<Result> Delete(string id, string userId)
         {
             try
             {
 
-                if (!string.IsNullOrEmpty(id.ToString()))
+                if (!string.IsNullOrEmpty(id.ToString()) && !string.IsNullOrWhiteSpace(userId))
                 {
                     var entity = await _roleRepository.GetByAsync(id);
+                    entity.IsDel = 1;
+                    entity.DeleteDate = DateTime.Now;
+                    entity.DeleteUserId = Guid.Parse(userId);
                     //在删除角色时应该是直接赋予该角色下所有用户为默认角色，且默认角色不可删除
                     //if (entity != null && entity.IsDefault == false)
                     //{
@@ -110,17 +113,19 @@ namespace SHS.Service.RoleService
             }
         }
 
-        public async Task<IEnumerable<Rolepermission>> GetAll(QueryRoleFilter filter)
+        public async Task<PagedResultDto<Rolepermission>> GetAll(QueryRoleFilter filter)
         {
-            var result = new List<Rolepermission>();
+            var result = new PagedResultDto<Rolepermission>();
             try
             {
                 var query = await _roleRepository.GetAllByAsync();
+                query = query.Where(x => x.IsDel == 0);
                 if (!string.IsNullOrWhiteSpace(filter.name))
                 {
                     query = query.Where(x => x.Name == filter.name);
                 }
-                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit).ToList();
+                result.TotalCount = query.Count();
+                result.Items = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit).ToList();
             }
             catch (Exception ex)
             {
@@ -166,6 +171,7 @@ namespace SHS.Service.RoleService
                 var result = _roleRepository.Get(role.ID);
                 if (result != null)
                 {
+                    result.UpdateDate = DateTime.Now;
                     //if (result.IsDefault == true)
                     //{
                     //    _logger.LogError("{0}:,{1},更新失败，已存在默认角色不能直接修改默认角色", DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"), "RoleServiceUpdateRole");
@@ -176,7 +182,16 @@ namespace SHS.Service.RoleService
                     //    await _roleRepository.UpdateByAsync(role);
                     //    return Result.Success(200);
                     //}
-                    await _roleRepository.UpdateByAsync(role);
+                    await _roleRepository.UpdateByAsync(role, r => new
+                    {
+                        r.UpdateDate,
+                        r.UpdateUserId,
+                        r.Name,
+                        r.Remarks,
+                        r.Sort,
+                        r.Summary,
+                        r.IsDefault,
+                    });
                     return Result.Success(200);
                 }
                 _logger.LogError("{0}:,{1},更新失败", DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"), "RoleServiceUpdateRole");

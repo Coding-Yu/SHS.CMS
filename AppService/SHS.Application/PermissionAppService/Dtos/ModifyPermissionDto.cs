@@ -7,7 +7,7 @@ namespace SHS.Application.PermissionAppService.Dtos
 {
 
     [AutoMap(typeof(PermissionDto))]
-    public class ModifyPermissionDto:BaseDto
+    public class ModifyPermissionDto : BaseDto
     {
         public string Name { get; set; }
 

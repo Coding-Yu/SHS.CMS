@@ -10,5 +10,6 @@ namespace API.Model.Tag
         public string Id { get; set; }
         public string Name { get; set; }
         public string Summary { get; set; }
+        public string Remarks { get; set; }
     }
 }

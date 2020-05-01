@@ -11,10 +11,10 @@ namespace SHS.Service.UsersService
     {
         Task<Result> Add(User user);
         IEnumerable<User> GetAll(QueryUserFilter filter);
-        Task<IEnumerable<User>> GetAllByAsync(QueryUserFilter filter);
+        Task<PagedResultDto<User>> GetAllByAsync(QueryUserFilter filter);
         Task<Result> Update(User user);
         Task<User> Get(string id);
-        Task<Result> Delete(string id);
+        Task<Result> Delete(string id,string userId);
 
         /// <summary>
         /// 给用户赋予角色

@@ -9,9 +9,9 @@ namespace SHS.Service.ArticleService
     public interface IArticleService
     {
         Task<Result> Add(Article article);
-        Task<IEnumerable<Article>> GetAll(QueryArticleFilter filter);
+        Task<PagedResultDto<Article>> GetAll(QueryArticleFilter filter);
         Task<Result> Update(Article article);
         Task<Article> Get(string id);
-        Task<Result> Delete(string id);
+        Task<Result> Delete(string id,string userId);
     }
 }

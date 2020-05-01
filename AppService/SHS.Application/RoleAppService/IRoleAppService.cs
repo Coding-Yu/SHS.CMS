@@ -10,12 +10,12 @@ namespace SHS.Application.RoleAppService
     {
         Task<RoleDto> Get(string id);
 
-        Task<IEnumerable<RoleDto>> GetAll(QueryRoleFilter filter);
-        Task<Result> AddAsync(RoleDto role);
+        Task<Base.PagedResultDto<RoleDto>> GetAll(QueryRoleFilter filter);
+        Task<Result> AddAsync(AddRoleDto role);
 
-        Task<Result> Update(RoleDto role);
+        Task<Result> Update(ModifyRoleDto role);
 
-        Task<Result> Delete(string id);
+        Task<Result> Delete(string id,string userId);
 
         Task<Result> RoleGivePermission(string roleid, IList<string> permissionIds);
 

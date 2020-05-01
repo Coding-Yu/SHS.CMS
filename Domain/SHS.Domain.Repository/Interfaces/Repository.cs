@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Internal;
 using SHS.Domain.Core.Interfaces;
 using SHS.Infra.Data;
 using System;
@@ -47,7 +49,7 @@ namespace SHS.Domain.Repository.Interfaces
 
         public async Task<IEnumerable<TEntity>> GetAllByAsync()
         {
-            return await _dbContext.Set<TEntity>().ToListAsync();
+            return await _dbContext.Set<TEntity>().AsNoTracking().ToListAsync();
         }
 
         public IEnumerable<TEntity> GetAll()
@@ -72,9 +74,17 @@ namespace SHS.Domain.Repository.Interfaces
             return _dbContext.SaveChanges();
         }
 
-        public async Task<int> RemoveByAsync(TEntity entity)
+        public async Task<int> RemoveByAsync(TEntity tentity)
         {
-            _dbContext.Remove(entity);
+            var entity = _dbContext.Entry(tentity);
+            if (tentity != null)
+            {
+                entity.State = EntityState.Modified;
+                entity.Property("IsDel").IsModified = true;
+                entity.Property("DeleteUserId").IsModified = true;
+                entity.Property("DeleteDate").IsModified = true;
+                await UpdateByAsync(tentity);
+            }
             return await _dbContext.SaveChangesAsync();
         }
 
@@ -87,9 +97,14 @@ namespace SHS.Domain.Repository.Interfaces
         public async Task<int> RemoveByAsync(object key)
         {
             var entity = Get(key);
+            var entry = _dbContext.Entry(Get(key));
             if (entity != null)
             {
-                Remove(entity);
+                entry.State = EntityState.Modified;
+                entry.Property("IsDel").IsModified = true;
+                entry.Property("DeleteUserId").IsModified = true;
+                entry.Property("DeleteDate").IsModified = true;
+                await UpdateByAsync(entity);
             }
             return await _dbContext.SaveChangesAsync();
         }
@@ -107,6 +122,28 @@ namespace SHS.Domain.Repository.Interfaces
 
         public async Task<int> UpdateByAsync(TEntity obj)
         {
+            //_dbContext.Entry(obj).CurrentValues.SetValues(obj);
+            //var entity = _dbContext.Entry(obj);
+            //entity.State = EntityState.Unchanged;
+            _dbContext.Update(obj);
+            return await _dbContext.SaveChangesAsync();
+        }
+        public async Task<int> UpdateByAsync(TEntity obj, Expression<Func<TEntity, object>> expression)
+        {
+            //Owned Reference
+            // var entity = _dbContext.Entry(obj);
+            var entity = _dbContext.Set<TEntity>().Attach(obj);
+            //entity.State = EntityState.Modified;
+            entity.Property("CreateUserId").IsModified = false;
+            entity.Property("CreateDate").IsModified = false;
+            foreach (var item in expression.GetPropertyAccessList())
+            {
+                // ((IObjectContextAdapter)_dbContext).ObjectContext.ObjectStateManager.ChangeRelationshipState(sourceEntity, targetEntity, navigationPropertySelector, relationshipState);
+                if (!string.IsNullOrWhiteSpace(item.Name))
+                {
+                    entity.Property(item.Name).IsModified = true;
+                }
+            }
             _dbContext.Update(obj);
             return await _dbContext.SaveChangesAsync();
         }

@@ -1,4 +1,5 @@
 ﻿using SHS.Application.ArticleAppService.Dtos;
+using SHS.Application.Base;
 using SHS.Service.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,9 @@ namespace SHS.Application.ArticleAppService
     public interface IArticleAppService
     {
         Task<Result> Add(AddArticleDto article);
-        Task<IEnumerable<ArticleDto>> GetAll(QueryArticleFilter filter);
+        Task<Base.PagedResultDto<ArticleDto>> GetAll(QueryArticleFilter filter);
         Task<Result> Update(ModifyArticleDto article);
         Task<ArticleDto> Get(string id);
-        Task<Result> Delete(string id);
+        Task<Result> Delete(string id,string userId);
     }
 }

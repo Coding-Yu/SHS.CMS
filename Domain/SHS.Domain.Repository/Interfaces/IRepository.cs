@@ -18,6 +18,7 @@ namespace SHS.Domain.Repository.Interfaces
         Task<IEnumerable<Tentity>> GetAllByAsync();
         int Update(Tentity obj);
         Task<int> UpdateByAsync(Tentity obj);
+        Task<int> UpdateByAsync(Tentity obj, Expression<Func<Tentity, object>> expression);
         int Remove(Tentity entity);
         Task<int> RemoveByAsync(Tentity entity);
         Task<int> RemoveByAsync(IEnumerable<Tentity> entities);

@@ -113,7 +113,7 @@ export default {
             this.loading = false
           }).catch((error) => {
             console.log(error)
-            this.loading = false
+            this.loading = true
           })
         } else {
           console.log('提交失败')

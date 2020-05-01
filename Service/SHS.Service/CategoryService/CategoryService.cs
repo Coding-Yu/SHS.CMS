@@ -37,7 +37,7 @@ namespace SHS.Service.CategoryService
             }
         }
 
-        public async Task<Result> Delete(string id)
+        public async Task<Result> Delete(string id, string userId)
         {
             try
             {
@@ -46,6 +46,9 @@ namespace SHS.Service.CategoryService
                     var category = await _categoryRepository.GetByAsync(id);
                     if (category != null)
                     {
+                        category.DeleteUserId = Guid.Parse(userId);
+                        category.DeleteDate = DateTime.Now;
+                        category.IsDel = 1;
                         await _categoryRepository.RemoveByAsync(category);
                         return Result.Success(200);
                     }
@@ -76,17 +79,19 @@ namespace SHS.Service.CategoryService
             }
         }
 
-        public async Task<IEnumerable<Category>> GetAll(QueryCategoryFilter filter)
+        public async Task<PagedResultDto<Category>> GetAll(QueryCategoryFilter filter)
         {
-            var result = new List<Category>();
+            var result = new PagedResultDto<Category>();
             try
             {
                 var query = await _categoryRepository.GetAllByAsync();
+                query = query.Where(x => x.IsDel == 0);
                 if (!string.IsNullOrWhiteSpace(filter.name))
                 {
                     query = query.Where(x => x.Name.Contains(filter.name));
                 }
-                result = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit).ToList();
+                result.TotalCount = query.Count();
+                result.Items = query.OrderByDescending(x => x.CreateDate).Skip(filter.limit * (filter.page - 1)).Take(filter.limit).ToList();
             }
             catch (Exception ex)
             {
@@ -101,6 +106,7 @@ namespace SHS.Service.CategoryService
             {
                 if (category != null)
                 {
+                    category.UpdateDate = DateTime.Now;
                     await _categoryRepository.UpdateByAsync(category);
                     return Result.Success();
                 }

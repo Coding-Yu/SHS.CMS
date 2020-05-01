@@ -40,7 +40,7 @@
       <el-table-column prop="sex" label="性别" :formatter="sexFormat"/>
       <el-table-column prop="age" label="年龄" />
       <el-table-column prop="roleID" label="角色" />
-      <el-table-column prop="area" label="区域" />
+      <el-table-column prop="areaID" label="区域" />
       <el-table-column prop="createDate" label="创建日期" :formatter="dateFormat"/>
       <el-table-column label="操作">
         <template slot-scope="{row}">
@@ -50,7 +50,7 @@
       </el-table-column>
     </el-table>
 
-    <el-pagination
+    <Pagination
       background
       v-show="total>0"
       :total="total"
@@ -71,7 +71,7 @@
         <el-form-item label="姓名" prop="name">
           <el-input v-model="temp.name" />
         </el-form-item>
-        <el-form-item label="性别" prop="sex">
+        <el-form-item label="性别" prop="sex" >
           <el-select v-model="temp.sex" class="filter-item" placeholder="请选择性别">
             <el-option
               v-for="item in sexTypeOptions"
@@ -94,7 +94,7 @@
           <el-input v-model="temp.age" />
         </el-form-item>
         <el-form-item label="角色" prop="roleID">
-          <el-select v-model="temp.roleId" class="filter-item" placeholder="请选择角色">
+          <el-select v-model="temp.roleID" class="filter-item" placeholder="请选择角色">
             <el-option
               v-for="item in roleTypeOptions"
               :key="item.id"
@@ -103,8 +103,15 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="地区" prop="area">
-          <el-input v-model="temp.area" />
+        <el-form-item label="地区" prop="areaID">
+           <el-select v-model="temp.areaID" class="filter-item" placeholder="请选择区域">
+            <el-option
+              v-for="item in areaTypeOptions"
+              :key="item.id"
+              :label="item.state+item.province+item.city+item.street"
+              :value="item.id"
+            />
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -122,21 +129,27 @@ import {
   getUser,
   createUser,
   updateUser,
-  // eslint-disable-next-line no-unused-vars
   deleteUser
 } from '@/api/user'
 import { getRoleList } from '@/api/role'
+import { getAreaList } from '@/api/area'
+import store from '@/store'
+import Pagination from '@/components/Pagination'
 const sexTypeOptions = [
   { key: '0', display_name: '男' },
   { key: '1', display_name: '女' }
 ]
 const roleTypeOptions = []
-
+const areaTypeOptions = []
 export default {
+  name: 'UserTable',
+  components: { Pagination },
   data() {
     return {
+      userId: store.state.user.userId,
       sexTypeOptions,
       roleTypeOptions,
+      areaTypeOptions,
       dialogTableVisible: false,
       tableData: [],
       tableKey: 0,
@@ -150,7 +163,11 @@ export default {
       },
       listRoleQuery: {
         page: 1,
-        limit: 20
+        limit: 2000
+      },
+      listAreaQuery: {
+        page: 1,
+        limit: 2000
       },
       dialogStatus: '',
       dialogFormVisible: false,
@@ -166,8 +183,8 @@ export default {
         phone: '',
         sex: '',
         age: '',
-        roleId: '',
-        area: '',
+        roleID: '',
+        areaID: '',
         createDate: ''
       },
       rules: {
@@ -187,13 +204,14 @@ export default {
   created() {
     this.getList()
     this.getRoleList()
+    this.getAreaList()
   },
   methods: {
     getList() {
       this.listLoading = true
       getUserList(this.listQuery).then(response => {
-        this.tableData = response.data
-        this.total = 1
+        this.tableData = response.data.items
+        this.total = response.data.totalCount
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
@@ -202,8 +220,15 @@ export default {
     },
     getRoleList() {
       getRoleList(this.listRoleQuery).then(response => {
-        this.roleTypeOptions = response.data
-        // Just to simulate the time of the request
+        this.roleTypeOptions = response.data.items
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1.5 * 1000)
+      })
+    },
+    getAreaList() {
+      getAreaList(this.listAreaQuery).then(response => {
+        this.areaTypeOptions = response.data.items
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
@@ -215,7 +240,7 @@ export default {
     },
     sexFormat: function(row, column) {
       var result = ''
-      if (row.sex !== '0') {
+      if (row.sex === 0) {
         result = '男'
       } else {
         result = '女'
@@ -232,7 +257,7 @@ export default {
         sex: '',
         age: '',
         roleID: '',
-        area: '',
+        areaID: '',
         createDate: ''
       }
     },
@@ -250,7 +275,9 @@ export default {
       })
     },
     handleUpdate(row) {
+      console.log(row)
       this.temp = Object.assign({}, row) // copy obj
+      this.temp.sex = Number(row.sex)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -260,6 +287,9 @@ export default {
     createData() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
+          this.temp.createDate = undefined
+          this.temp.id = undefined
+          this.temp.createuserId = this.userId
           createUser(this.temp).then(() => {
             this.dialogFormVisible = false
             this.$notify({
@@ -276,6 +306,7 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
+          this.temp.updateUserId = this.userId
           const tempData = Object.assign({}, this.temp)
           updateUser(tempData).then(() => {
             this.dialogFormVisible = false
@@ -291,7 +322,7 @@ export default {
       })
     },
     deleteData(row) {
-      deleteUser(row.id).then(() => {
+      deleteUser(row.id, this.userId).then(() => {
         this.$notify({
           title: '提示',
           message: '删除成功',

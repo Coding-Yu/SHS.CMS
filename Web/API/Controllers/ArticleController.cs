@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using API.Model.Article;
 using API.Model.AuthenticationModel;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SHS.Application.ArticleAppService;
@@ -17,9 +17,11 @@ namespace API.Controllers
     public class ArticleController : ControllerBase
     {
         private readonly IArticleAppService _articleAppService;
-        public ArticleController(IArticleAppService articleAppService)
+        public readonly IMapper _mapper;
+        public ArticleController(IArticleAppService articleAppService, IMapper mapper)
         {
             _articleAppService = articleAppService;
+            _mapper = mapper;
         }
 
         [HttpPost("GetList")]
@@ -44,44 +46,27 @@ namespace API.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<JsonResult> Add(AddOrEditArticleModel model)
+        public async Task<JsonResult> Add(AddArticleDto model)
         {
-            var article = new AddArticleDto();
-            article.Title = model.Title;
-            article.Content = model.Content;
-            article.SourceLink = model.SourceLink;
-            article.CategoryId = model.CategoryId;
-            article.CreateDate = DateTime.Now;
-            article.TagIds = model.TagIds;
-            //article.CreateUserId = 1; TODO 用户ID
-            var result = await _articleAppService.Add(article);
+            var result = await _articleAppService.Add(model);
             OutputModel outputModel = new OutputModel();
             outputModel.Data = result;
             return new JsonResult(outputModel);
         }
 
         [HttpPost("Update")]
-        public async Task<JsonResult> Update(AddOrEditArticleModel model)
+        public async Task<JsonResult> Update(ModifyArticleDto model)
         {
-
-            var article = new ModifyArticleDto();
-            article.Title = model.Title;
-            article.Content = model.Content;
-            article.SourceLink = model.SourceLink;
-            article.CategoryId = model.CategoryId;
-            article.UpdateDate = DateTime.Now;
-            article.TagIds = model.TagIds;
-            //article.UpdateUserId = 1; TODO 用户ID
-            var result = await _articleAppService.Update(article);
+            var result = await _articleAppService.Update(model);
             OutputModel outputModel = new OutputModel();
             outputModel.Data = result;
             return new JsonResult(outputModel);
         }
 
         [HttpPost("Delete")]
-        public async Task<JsonResult> Delete(string id)
+        public async Task<JsonResult> Delete(string id, string userId)
         {
-            var result = await _articleAppService.Delete(id);
+            var result = await _articleAppService.Delete(id, userId);
             OutputModel outputModel = new OutputModel();
             outputModel.Data = result;
             return new JsonResult(outputModel);

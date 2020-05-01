@@ -11,9 +11,9 @@ namespace SHS.Service.TagService
     public interface ITagService
     {
         Task<Result> Add(Tag  tag);
-        Task<IEnumerable<Tag>> GetAll(QueryTagFilter filter);
+        Task<PagedResultDto<Tag>> GetAll(QueryTagFilter filter);
         Task<Result> Update(Tag tag);
         Task<Tag> Get(string id);
-        Task<Result> Delete(string id);
+        Task<Result> Delete(string id,string userId);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SHS.Application.Base;
 using SHS.Domain.Core.Articles;
+using System;
 using System.Collections.Generic;
 
 namespace SHS.Application.ArticleAppService.Dtos
@@ -10,6 +11,7 @@ namespace SHS.Application.ArticleAppService.Dtos
     {
         public string Title { get; set; }
 
+        public string Summary { get; set; }
         public string Content { get; set; }
 
         public string SourceLink { get; set; }

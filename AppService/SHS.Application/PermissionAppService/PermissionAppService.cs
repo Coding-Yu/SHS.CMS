@@ -20,18 +20,12 @@ namespace SHS.Application.PermissionAppService
         }
         public async Task<Result> Add(AddPermissionDto dto)
         {
-            Permission permission = new Permission();
-            permission.Name = dto.Name;
-            permission.Path = dto.Path;
-            permission.CreateDate = dto.CreateDate;
-            permission.CreateUserId = dto.CreateUserId;
-            permission.Remarks = dto.Remarks;
-            return await _permissionService.Add(permission);
+            return await _permissionService.Add(_mapper.Map<Permission>(dto));
         }
 
-        public async Task<Result> Delete(string id)
+        public async Task<Result> Delete(string id, string userId)
         {
-            return await _permissionService.Delete(id);
+            return await _permissionService.Delete(id, userId);
         }
 
         public async Task<Dtos.PermissionDto> Get(string id)
@@ -39,9 +33,9 @@ namespace SHS.Application.PermissionAppService
             return _mapper.Map<Dtos.PermissionDto>(await _permissionService.Get(id));
         }
 
-        public async Task<IEnumerable<Dtos.PermissionDto>> GetAll(QueryPermissionFilter filter)
+        public async Task<Base.PagedResultDto<Dtos.PermissionDto>> GetAll(QueryPermissionFilter filter)
         {
-            var result = new List<PermissionDto>();
+            var result = new Base.PagedResultDto<PermissionDto>();
             var permission = await _permissionService.GetAll(new Service.PermissionService.Dto.QueryPermissionFilter()
             {
                 name = filter.name,
@@ -50,32 +44,13 @@ namespace SHS.Application.PermissionAppService
                 limit = filter.limit,
                 Sort = filter.Sort,
             });
-            foreach (var item in permission)
-            {
-                result.Add(new PermissionDto()
-                {
-                    ID = item.ID.ToString(),
-                    name = item.Name,
-                    path = item.Path,
-                    UpdateDate = item.UpdateDate,
-                    UpdateUserId = item.UpdateUserId,
-                    CreateDate = item.CreateDate,
-                    CreateUserId = item.CreateUserId,
-                    Remarks = item.Remarks,
-                });
-            }
+            result.Items = _mapper.Map<List<PermissionDto>>(permission.Items);
+            result.TotalCount = permission.TotalCount;
             return result;
         }
 
         public async Task<Result> Update(ModifyPermissionDto dto)
         {
-            Permission permission = new Permission();
-            permission.ID = Guid.Parse(dto.ID);
-            permission.Name = dto.Name;
-            permission.Path = dto.Path;
-            permission.UpdateDate = dto.UpdateDate;
-            permission.UpdateUserId = Guid.Parse(dto.UpdateUserId.ToString());
-            permission.Remarks = dto.Remarks;
             return await _permissionService.Update(_mapper.Map<Permission>(dto));
         }
     }

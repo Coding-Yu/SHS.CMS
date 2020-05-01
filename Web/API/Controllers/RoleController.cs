@@ -39,42 +39,27 @@ namespace API.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<JsonResult> Add(AddOrEditRoleModel model)
+        public async Task<JsonResult> Add(AddRoleDto model)
         {
-            var role = new RoleDto();
-            role.Name = model.Name;
-            role.isDefault = model.IsDefault;
-            role.Summary = model.Summary;
-            role.Remarks = model.Remarks;
-            role.CreateDate = DateTime.Now;
-            //role.CreateUserId=1 TODO 用户ID
-            var result = await _roleAppService.AddAsync(role);
+            var result = await _roleAppService.AddAsync(model);
             OutputModel outputModel = new OutputModel();
             outputModel.Data = result;
             return new JsonResult(outputModel);
         }
 
         [HttpPost("Update")]
-        public async Task<JsonResult> Update(AddOrEditRoleModel model)
+        public async Task<JsonResult> Update(ModifyRoleDto model)
         {
-            var role = new RoleDto();
-            role.ID = model.Id;
-            role.Name = model.Name;
-            role.isDefault = model.IsDefault;
-            role.Remarks = model.Remarks;
-            role.UpdateDate = DateTime.Now;
-            role.Summary = model.Summary;
-            //role.UpdateUserId = 1; TODO 用户ID
-            var result = await _roleAppService.Update(role);
+            var result = await _roleAppService.Update(model);
             OutputModel outputModel = new OutputModel();
             outputModel.Data = result;
             return new JsonResult(outputModel);
         }
 
         [HttpPost("Delete")]
-        public async Task<JsonResult> Delete(string id)
+        public async Task<JsonResult> Delete(string id, string userId)
         {
-            var result = await _roleAppService.Delete(id);
+            var result = await _roleAppService.Delete(id, userId);
             OutputModel outputModel = new OutputModel();
             outputModel.Data = result;
             return new JsonResult(outputModel);
@@ -83,7 +68,7 @@ namespace API.Controllers
         [HttpPost("SetPermission")]
         public async Task<JsonResult> SetPermission(SetPermissionModel model)
         {
-            var result = await _roleAppService.RoleGivePermission(model.RoleID,model.PermissionIds);
+            var result = await _roleAppService.RoleGivePermission(model.RoleID, model.PermissionIds);
             OutputModel outputModel = new OutputModel();
             outputModel.Data = result;
             return new JsonResult(outputModel);
