@@ -46,7 +46,7 @@ namespace API
             services.AddCors(options =>
             {
                 options.AddPolicy(MyAllowSpecificOrigins,
-                    builder => builder.WithOrigins("http://localhost:9528")
+                    builder => builder.WithOrigins("http://localhost:9528","http://shscms.cn")
                     .AllowAnyMethod()
                     .AllowAnyHeader());
             });
@@ -56,7 +56,6 @@ namespace API
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new AutoMapperConfigs());
-                mc.AddProfile(new ModelToDtoAutoMapperConfig());
             });
 
             IMapper mapper = mappingConfig.CreateMapper();
@@ -148,7 +147,6 @@ namespace API
                 c.RoutePrefix = string.Empty;
             });
             app.UseMvc();
-
         }
     }
 }
