@@ -17,5 +17,7 @@ namespace SHS.Service.PermissionService
 
         Task<Result> Delete(string id, string userId);
 
+        Task<List<Permission>> GetPermissionByRoleId(string roleId);
+
     }
 }

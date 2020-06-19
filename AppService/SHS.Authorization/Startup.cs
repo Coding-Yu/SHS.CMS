@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SHS.Infra.Data;
 using System;
@@ -9,6 +10,11 @@ namespace SHS.Authorization
 {
     public class Startup
     {
+        private IConfiguration _configuration { get; set; }
+        public Startup(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         public void ConfigureServices(IServiceCollection services)
         {
             // configure identity server with in-memory stores, keys, clients and scopes
@@ -23,20 +29,17 @@ namespace SHS.Authorization
             {
                 options.AddPolicy("any", builder =>
                 {
-                    builder.AllowAnyOrigin(); //允许任何来源的主机访问
-                    builder.WithOrigins("http://localhost:5000") ////允许http://localhost:8080的主机访问
+                    builder.WithOrigins(_configuration["WebHost:CrossDomain:URL"]) //允许http://localhost:8080的主机访问
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials();//指定处理cookie
 
                 });
             });
-            //services.AddDbContext<CMSContext>(options =>
-            //        options.UseSqlServer(Configuration.GetConnectionString("SqlServerContext")));
         }
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

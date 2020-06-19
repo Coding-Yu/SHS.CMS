@@ -13,11 +13,13 @@ namespace SHS.Service.PermissionService
     public class PermissionService : IPermissionService
     {
         private readonly IRepository<Permission> _permissionRepository;
+        private readonly IRepository<RolePermission> _rolePermissionRepository;
         private readonly ILogger<PermissionService> _logger;
-        public PermissionService(IRepository<Permission> permissionRepository, ILogger<PermissionService> logger)
+        public PermissionService(IRepository<Permission> permissionRepository, ILogger<PermissionService> logger, IRepository<RolePermission> rolePermissionRepository)
         {
             _logger = logger;
             _permissionRepository = permissionRepository;
+            _rolePermissionRepository = rolePermissionRepository;
         }
         public async Task<Result> Add(Permission permission)
         {
@@ -117,6 +119,38 @@ namespace SHS.Service.PermissionService
                 _logger.LogError("权限更新异常：" + ex.ToString());
                 return Result.Fail(500, ex.ToString());
             }
+        }
+
+        public async Task<List<Permission>> GetPermissionByRoleId(string roleId)
+        {
+            var result = new List<Permission>();
+            if (!string.IsNullOrWhiteSpace(roleId))
+            {
+                var rolePermissionQuery = await _rolePermissionRepository.GetAllByAsync();
+                var rolePermissionList = rolePermissionQuery.Where(x => x.RoleId == Guid.Parse(roleId)).ToList();
+                var permissionQuery = await _permissionRepository.GetAllByAsync();
+                var permissionList = permissionQuery.Where(x => x.IsDel == 0).ToList();
+                var s = from p in permissionList
+                        join rolep in rolePermissionList
+                        on p.ID equals rolep.PermissionId
+                        select new Permission
+                        {
+                            CreateDate = p.CreateDate,
+                            CreateUserId = p.CreateUserId,
+                            DeleteDate = p.DeleteDate,
+                            DeleteUserId = p.DeleteUserId,
+                            ID = p.ID,
+                            IsDel = p.IsDel,
+                            Name = p.Name,
+                            Path = p.Path,
+                            Remarks = p.Remarks,
+                            Sort = p.Sort,
+                            UpdateDate = p.UpdateDate,
+                            UpdateUserId = p.UpdateUserId
+                        };
+                result = s.ToList();
+            }
+            return result;
         }
     }
 }

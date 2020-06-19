@@ -275,7 +275,6 @@ export default {
       })
     },
     handleUpdate(row) {
-      console.log(row)
       this.temp = Object.assign({}, row) // copy obj
       this.temp.sex = Number(row.sex)
       this.dialogStatus = 'update'

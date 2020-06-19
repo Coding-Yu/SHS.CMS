@@ -14,7 +14,7 @@ export function getRole(id) {
     return request({
         url: config.BASE_URL + 'Role/Get',
         method: 'get',
-        params: id
+        params: { id: id }
     })
 }
 
@@ -49,7 +49,7 @@ export function setPermission(data) {
         data
     })
 }
-export function getPermissionByRoleId(id) {
+export async function getPermissionByRoleId(id) {
     return request({
         url: config.BASE_URL + 'Role/GetPermissionByRoleId',
         method: 'get',

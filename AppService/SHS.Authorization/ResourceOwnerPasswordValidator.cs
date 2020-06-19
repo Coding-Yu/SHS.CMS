@@ -61,8 +61,7 @@ namespace SHS.Authorization
         {
             return new Claim[]
             {
-            new Claim("icon",user.Icon.ToString()),
-            new Claim("UserId", user.ID.ToString()),
+            new Claim("icon",!string.IsNullOrWhiteSpace(user.Icon)?user.Icon:"https://tse1-mm.cn.bing.net/th?id=OIP.VWs6ip-0SNpR7Yof8YYfCgAAAA&w=152&h=160&c=8&rs=1&qlt=90&pid=3.1&rm=2"),
             new Claim(JwtClaimTypes.Name,user.Name),
             new Claim(JwtClaimTypes.Email, user.Email),
             new Claim(JwtClaimTypes.Role,user.RoleID.ToString())

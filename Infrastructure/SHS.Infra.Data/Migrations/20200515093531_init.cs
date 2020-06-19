@@ -55,6 +55,25 @@ namespace SHS.Infra.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SHS.CMS.Logger",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MachineName = table.Column<string>(nullable: true),
+                    MachineIp = table.Column<string>(nullable: true),
+                    Logged = table.Column<DateTime>(nullable: false),
+                    NetRequestMethod = table.Column<string>(nullable: true),
+                    NetRequestUrl = table.Column<string>(nullable: true),
+                    Level = table.Column<string>(nullable: true),
+                    Exception = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SHS.CMS.Logger", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SHS.CMS.Permission",
                 columns: table => new
                 {
@@ -249,17 +268,17 @@ namespace SHS.Infra.Data.Migrations
             migrationBuilder.InsertData(
                 table: "SHS.CMS.Area",
                 columns: new[] { "ID", "City", "CreateDate", "CreateUserId", "DeleteDate", "DeleteUserId", "IsDel", "Province", "Remarks", "Sort", "State", "Street", "UpdateDate", "UpdateUserId", "ZipCode" },
-                values: new object[] { new Guid("f33e48b4-a86d-4f23-84b9-8855a3e477bd"), "长沙", new DateTime(2020, 4, 30, 17, 17, 38, 869, DateTimeKind.Local).AddTicks(8379), new Guid("9033b48d-f1fc-4811-b8f7-5871cccedddd"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), 0, "湖南", null, 0L, "中国", "解放西", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), null });
+                values: new object[] { new Guid("a122c40d-1bc0-4dcf-be5e-8e2536ab4637"), "长沙", new DateTime(2020, 5, 15, 17, 35, 31, 136, DateTimeKind.Local).AddTicks(526), new Guid("d118665a-3e55-49f0-a74c-57710133025b"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), 0, "湖南", null, 0L, "中国", "解放西", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), null });
 
             migrationBuilder.InsertData(
                 table: "SHS.CMS.Role",
                 columns: new[] { "ID", "CreateDate", "CreateUserId", "DeleteDate", "DeleteUserId", "IsDefault", "IsDel", "Name", "Remarks", "Sort", "Summary", "UpdateDate", "UpdateUserId" },
-                values: new object[] { new Guid("d8ee3b97-8f33-43ef-89d9-63243aedd30e"), new DateTime(2020, 4, 30, 17, 17, 38, 867, DateTimeKind.Local).AddTicks(9871), new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), false, 0, "系统管理员", "系统最高管理员", 0L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") });
+                values: new object[] { new Guid("e46774fa-9449-4bca-ab60-d6c9d3806449"), new DateTime(2020, 5, 15, 17, 35, 31, 133, DateTimeKind.Local).AddTicks(8427), new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), false, 0, "系统管理员", "系统最高管理员", 0L, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") });
 
             migrationBuilder.InsertData(
                 table: "SHS.CMS.User",
                 columns: new[] { "ID", "Age", "AreaID", "CreateDate", "CreateUserId", "DeleteDate", "DeleteUserId", "DetailAddress", "Email", "Icon", "IsDel", "LastLoginDate", "LastLoginIp", "Name", "Password", "Phone", "Remarks", "RoleID", "Sex", "Sort", "UpdateDate", "UpdateUserId" },
-                values: new object[] { new Guid("9033b48d-f1fc-4811-b8f7-5871cccedddd"), 0, new Guid("f33e48b4-a86d-4f23-84b9-8855a3e477bd"), new DateTime(2020, 4, 30, 17, 17, 38, 870, DateTimeKind.Local).AddTicks(943), new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), 0, "1076372177@qq.com", "https://tse1-mm.cn.bing.net/th?id=OIP.VWs6ip-0SNpR7Yof8YYfCgAAAA&w=152&h=160&c=8&rs=1&qlt=90&pid=3.1&rm=2", 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "admin", "e1adc3949ba59abbe56e057f2f883e", null, "管理员", new Guid("d8ee3b97-8f33-43ef-89d9-63243aedd30e"), 0, 0L, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") });
+                values: new object[] { new Guid("d118665a-3e55-49f0-a74c-57710133025b"), 0, new Guid("a122c40d-1bc0-4dcf-be5e-8e2536ab4637"), new DateTime(2020, 5, 15, 17, 35, 31, 136, DateTimeKind.Local).AddTicks(3348), new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), 0, "1076372177@qq.com", "https://tse1-mm.cn.bing.net/th?id=OIP.VWs6ip-0SNpR7Yof8YYfCgAAAA&w=152&h=160&c=8&rs=1&qlt=90&pid=3.1&rm=2", 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "admin", "e1adc3949ba59abbe56e057f2f883e", null, "管理员", new Guid("e46774fa-9449-4bca-ab60-d6c9d3806449"), 0, 0L, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_SHS.CMS.Article_CategoryId",
@@ -291,6 +310,9 @@ namespace SHS.Infra.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "SHS.CMS.ArticleTag");
+
+            migrationBuilder.DropTable(
+                name: "SHS.CMS.Logger");
 
             migrationBuilder.DropTable(
                 name: "SHS.CMS.RolePermission");

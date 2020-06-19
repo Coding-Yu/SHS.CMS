@@ -17,9 +17,15 @@ namespace SHS.Authorization
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-            .UseUrls("http://localhost:5000")
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        {
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true)
+                .Build();
+            return   WebHost.CreateDefaultBuilder(args)
+            .UseUrls(config["WebHost:Auth:URL"])
                 .UseStartup<Startup>();
+        }
     }
 }

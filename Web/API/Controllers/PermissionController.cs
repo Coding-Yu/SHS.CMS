@@ -65,5 +65,14 @@ namespace API.Controllers
             outputModel.Data = result;
             return Json(outputModel);
         }
+
+        [HttpPost("GetPermissionByRoleId")]
+        public async Task<JsonResult> GetPermissionByRoleId(string roleId)
+        {
+            var result = await _permissionAppService.GetPermissionByRoleId(roleId);
+            OutputModel outputModel = new OutputModel();
+            outputModel.Data = result;
+            return Json(outputModel);
+        }
     }
 }

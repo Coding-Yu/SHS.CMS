@@ -15,5 +15,6 @@ namespace SHS.Application.PermissionAppService
         Task<Result> Update(ModifyPermissionDto permiision);
 
         Task<Result> Delete(string id, string userId);
+        Task<List<PermissionDto>> GetPermissionByRoleId(string roleId);
     }
 }

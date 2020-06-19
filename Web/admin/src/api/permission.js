@@ -41,3 +41,10 @@ export function remove(id, userId) {
         params: { id: id, userId: userId }
     })
 }
+export function getPermissionByRoleId(roleId) {
+    return request({
+        url: config.BASE_URL + 'permission/GetPermissionByRoleId',
+        method: 'post',
+        params: { roleId: roleId }
+    })
+}

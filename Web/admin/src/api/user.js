@@ -9,11 +9,10 @@ export function login(data) {
     })
 }
 
-export function getInfo(data) {
+export function getInfo() {
     return request({
         url: config.BASE_URL + 'Authentication/GetUser',
         method: 'get'
-            // data: 'token' + data
     })
 }
 

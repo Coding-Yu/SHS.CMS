@@ -6,6 +6,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
+import Login from '@/views/login/index'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -37,7 +38,6 @@ export const constantRoutes = [{
             import ('@/views/login/index'),
         hidden: true
     },
-
     {
         path: '/404',
         component: () =>
@@ -54,7 +54,7 @@ export const constantRoutes = [{
             name: 'Dashboard',
             component: () =>
                 import ('@/views/dashboard/index'),
-            meta: { title: '控制面板', icon: 'dashboard' }
+            meta: { title: '控制面板', icon: 'dashboard', roles: ['test'] }
         }]
     },
 
@@ -65,14 +65,15 @@ export const constantRoutes = [{
         name: 'centent',
         meta: {
             title: '内容管理',
-            icon: 'article'
+            icon: 'article',
+            roles: ['test']
         },
         children: [{
                 path: 'categoryList',
                 component: () =>
                     import ('@/views/centent/categoryList/index'),
                 name: 'categoryList',
-                meta: { title: '分类列表' }
+                meta: { title: '分类列表', roles: ['test'] }
             },
             {
                 path: 'articleList',
@@ -174,6 +175,30 @@ export const constantRoutes = [{
             }
         ]
     },
+    {
+        path: '/systemSetting',
+        component: Layout,
+        redirect: 'noredirect',
+        name: 'SystemSetting',
+        meta: {
+            title: '系统设置',
+            icon: 'setting'
+        },
+        children: [{
+            path: 'logSystemSetting',
+            name: 'logSystemSetting',
+            meta: { title: '系统设置', icon: 'user' },
+            component: () =>
+                import ('@/views/systemSetting/log/index'),
+            children: [{
+                path: 'log',
+                name: 'log',
+                component: () =>
+                    import ('@/views/systemSetting/log/index'), // Parent router-view
+                meta: { title: '日志管理' }
+            }]
+        }, ]
+    },
 
     // 404 page must be placed at the end !!!
     { path: '*', redirect: '/404', hidden: true }
@@ -192,4 +217,38 @@ export function resetRouter() {
     const newRouter = createRouter()
     router.matcher = newRouter.matcher // reset router
 }
+export const constantRouterMap = [
+        { path: '/login', component: Login },
+        {
+            path: '/',
+            component: Layout,
+            redirect: '/dashboard',
+            children: [{
+                path: 'dashboard',
+                component: () =>
+                    import ('@/views/dashboard/index'),
+            }]
+        },
+    ]
+    //异步挂载的路由
+    //动态需要根据权限加载的路由表 
+export const asyncRouterMap = [{
+        path: '/centent',
+        component: import ('@/views/centent/categoryList'),
+        name: 'centent',
+        meta: { role: ['test'] }, //页面需要的权限
+        children: [{
+            path: 'index',
+            component: import ('@/views/centent/categoryList/index'),
+            name: 'categoryList',
+            meta: { role: ['test'] } //页面需要的权限
+        }]
+    },
+    // { path: '*', redirect: '/404', hidden: true },
+    // { path: '*', redirect: '/404', hidden: true }
+];
+
+// export default new Router({
+//     routes: constantRouterMap // store.getters.addRouters constantRoutes constantRouterMap
+// });
 export default router

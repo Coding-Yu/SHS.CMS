@@ -4,5 +4,25 @@
         <name>API</name>
     </assembly>
     <members>
+        <member name="P:API.Filter.RequestActionFilter.ActionId">
+            <summary>
+            全局请求ID号
+            </summary>
+        </member>
+        <member name="P:API.Filter.RequestActionFilter.ClientIp">
+            <summary>
+            客户端IP地址
+            </summary>
+        </member>
+        <member name="P:API.Filter.RequestActionFilter.RequestId">
+            <summary>
+            请求ID号
+            </summary>
+        </member>
+        <member name="P:API.Filter.RequestActionFilter.URL">
+            <summary>
+            请求的接口
+            </summary>
+        </member>
     </members>
 </doc>

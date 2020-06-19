@@ -74,10 +74,10 @@ namespace SHS.Infra.Data.Migrations
                     b.HasData(
                         new
                         {
-                            ID = new Guid("f33e48b4-a86d-4f23-84b9-8855a3e477bd"),
+                            ID = new Guid("a122c40d-1bc0-4dcf-be5e-8e2536ab4637"),
                             City = "长沙",
-                            CreateDate = new DateTime(2020, 4, 30, 17, 17, 38, 869, DateTimeKind.Local).AddTicks(8379),
-                            CreateUserId = new Guid("9033b48d-f1fc-4811-b8f7-5871cccedddd"),
+                            CreateDate = new DateTime(2020, 5, 15, 17, 35, 31, 136, DateTimeKind.Local).AddTicks(526),
+                            CreateUserId = new Guid("d118665a-3e55-49f0-a74c-57710133025b"),
                             DeleteDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeleteUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             IsDel = 0,
@@ -187,6 +187,39 @@ namespace SHS.Infra.Data.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("SHS.CMS.Category");
+                });
+
+            modelBuilder.Entity("SHS.Domain.Core.Logger.Log", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Exception")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Level")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Logged")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MachineIp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MachineName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NetRequestMethod")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NetRequestUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SHS.CMS.Logger");
                 });
 
             modelBuilder.Entity("SHS.Domain.Core.Permissions.Permission", b =>
@@ -300,8 +333,8 @@ namespace SHS.Infra.Data.Migrations
                     b.HasData(
                         new
                         {
-                            ID = new Guid("d8ee3b97-8f33-43ef-89d9-63243aedd30e"),
-                            CreateDate = new DateTime(2020, 4, 30, 17, 17, 38, 867, DateTimeKind.Local).AddTicks(9871),
+                            ID = new Guid("e46774fa-9449-4bca-ab60-d6c9d3806449"),
+                            CreateDate = new DateTime(2020, 5, 15, 17, 35, 31, 133, DateTimeKind.Local).AddTicks(8427),
                             CreateUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             DeleteDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeleteUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -457,10 +490,10 @@ namespace SHS.Infra.Data.Migrations
                     b.HasData(
                         new
                         {
-                            ID = new Guid("9033b48d-f1fc-4811-b8f7-5871cccedddd"),
+                            ID = new Guid("d118665a-3e55-49f0-a74c-57710133025b"),
                             Age = 0,
-                            AreaID = new Guid("f33e48b4-a86d-4f23-84b9-8855a3e477bd"),
-                            CreateDate = new DateTime(2020, 4, 30, 17, 17, 38, 870, DateTimeKind.Local).AddTicks(943),
+                            AreaID = new Guid("a122c40d-1bc0-4dcf-be5e-8e2536ab4637"),
+                            CreateDate = new DateTime(2020, 5, 15, 17, 35, 31, 136, DateTimeKind.Local).AddTicks(3348),
                             CreateUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             DeleteDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeleteUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -472,7 +505,7 @@ namespace SHS.Infra.Data.Migrations
                             Name = "admin",
                             Password = "e1adc3949ba59abbe56e057f2f883e",
                             Remarks = "管理员",
-                            RoleID = new Guid("d8ee3b97-8f33-43ef-89d9-63243aedd30e"),
+                            RoleID = new Guid("e46774fa-9449-4bca-ab60-d6c9d3806449"),
                             Sex = 0,
                             Sort = 0L,
                             UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),

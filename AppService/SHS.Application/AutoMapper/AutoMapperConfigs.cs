@@ -2,6 +2,7 @@
 using SHS.Application.AreaAppService.Dtos;
 using SHS.Application.ArticleAppService.Dtos;
 using SHS.Application.CategoryAppService.Dtos;
+using SHS.Application.LogAppService.Dtos;
 using SHS.Application.PermissionAppService.Dtos;
 using SHS.Application.RoleAppService.Dtos;
 using SHS.Application.TagAppService.Dtos;
@@ -9,6 +10,7 @@ using SHS.Application.UserAppService.Dtos;
 using SHS.Domain.Core.Area;
 using SHS.Domain.Core.Articles;
 using SHS.Domain.Core.Categorys;
+using SHS.Domain.Core.Logger;
 using SHS.Domain.Core.Permissions;
 using SHS.Domain.Core.Roles;
 using SHS.Domain.Core.Tags;
@@ -121,6 +123,11 @@ namespace SHS.Application.AutoMapper
 
             CreateMap<Rolepermission, ModifyRoleDto>();
             CreateMap<ModifyRoleDto, Rolepermission>();
+            #endregion
+
+            #region log
+            CreateMap<Log, LogDto>();
+            CreateMap<LogDto, Log>();
             #endregion
         }
         public class GuidTypeConverter : ITypeConverter<Guid, String>

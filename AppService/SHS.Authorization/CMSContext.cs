@@ -15,11 +15,13 @@ namespace SHS.Authorization
 {
     public class CMSContext : DbContext
     {
+        public CMSContext(DbContextOptions<CMSContext> options) : base(options) { }
+        public CMSContext() { }
         public Microsoft.EntityFrameworkCore.DbSet<User> Users { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("SHSCMSDB"));
+            optionsBuilder.UseSqlServer(configuration["DBConfig:MSSQL:ConnectionString"].ToString());
         }
     }
 }

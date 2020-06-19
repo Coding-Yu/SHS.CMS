@@ -100,11 +100,12 @@ namespace SHS.Service.RoleService
         {
             try
             {
+                var result = new Rolepermission();
                 if (!string.IsNullOrEmpty(id))
                 {
-                    return await _roleRepository.GetByAsync(id);
+                    result = await _roleRepository.GetByAsync(id);
                 }
-                return null;
+                return result;
             }
             catch (Exception ex)
             {

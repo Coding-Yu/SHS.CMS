@@ -1,44 +1,31 @@
 ﻿using API.AutoMapper;
+using API.Filter;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using SHS.Application.AreaAppService;
-using SHS.Application.ArticleAppService;
 using SHS.Application.AutoMapper;
-using SHS.Application.CategoryAppService;
-using SHS.Application.PermissionAppService;
-using SHS.Application.RoleAppService;
-using SHS.Application.TagAppService;
-using SHS.Application.UserAppService;
 using SHS.Domain.Repository.Interfaces;
 using SHS.Infra.Data;
-using SHS.Service.AreaService;
-using SHS.Service.ArticleService;
-using SHS.Service.CategoryService;
-using SHS.Service.PermissionService;
-using SHS.Service.RoleService;
-using SHS.Service.TagService;
-using SHS.Service.UsersService;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace API
 {
     public class Startup
     {
+
+        public IConfiguration _configuration { get; set; }
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -46,12 +33,18 @@ namespace API
             services.AddCors(options =>
             {
                 options.AddPolicy(MyAllowSpecificOrigins,
-                    builder => builder.WithOrigins("http://localhost:9528","http://shscms.cn")
+                    builder => builder.WithOrigins(_configuration["WebHost:CrossDomain:URL"])
                     .AllowAnyMethod()
                     .AllowAnyHeader());
             });
-            services.AddMvc(options => { options.EnableEndpointRouting = false; });
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(
+                options =>
+                {
+                    options.EnableEndpointRouting = false;
+                    options.Filters.Add(typeof(GlobalExceptionFilter));
+                    options.Filters.Add(typeof(RequestActionFilter));
+                }
+                );
             // Auto Mapper Configurations
             var mappingConfig = new MapperConfiguration(mc =>
             {
@@ -64,31 +57,23 @@ namespace API
             //IMapper mapper = new Mapper(configuration);
             services.AddSingleton(mapper);
             //Configuration.GetConnectionString(
-            services.AddDbContext<CMSContext>(option => option.UseSqlServer(@"Server=.\sqlexpress;uid=shs;pwd=123456;database=SHS.CMS;"));
+            services.AddDbContext<CMSContext>(option => option.UseSqlServer(_configuration["DBConfig:MSSQL:ConnectionString"]));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-            //services.AddScoped(AppDomain.CurrentDomain.GetAssemblies().GetType());
-
-            services.AddScoped<IUserAppService, UserAppService>();
-            services.AddScoped<IUserService, UserService>();
-
-            services.AddScoped<IRoleService, RoleService>();
-            services.AddScoped<IRoleAppService, RoleAppService>();
-
-            services.AddScoped<IArticleService, ArticleService>();
-            services.AddScoped<IArticleAppService, ArticleAppService>();
-
-            services.AddScoped<IPermissionService, PermissionService>();
-            services.AddScoped<IPermissionAppService, PermissionAppService>();
-
-            services.AddScoped<ITagService, TagService>();
-            services.AddScoped<ITagAppService, TagAppService>();
-
-            services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<ICategoryAppService, CategoryAppService>();
-
-            services.AddScoped<IAreaService, AreaService>();
-            services.AddScoped<IAreaAppService, AreaAppService>();
+            foreach (var item in GetClassName("SHS.Application"))
+            {
+                foreach (var typeArray in item.Value)
+                {
+                    services.AddScoped(typeArray, item.Key);
+                }
+            }
+            foreach (var item in GetClassName("SHS.Service"))
+            {
+                foreach (var typeArray in item.Value)
+                {
+                    services.AddScoped(typeArray, item.Key);
+                }
+            }
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
@@ -135,6 +120,7 @@ namespace API
             app.UseAuthentication();
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -147,6 +133,23 @@ namespace API
                 c.RoutePrefix = string.Empty;
             });
             app.UseMvc();
+
+        }
+        public Dictionary<Type, Type[]> GetClassName(string assemblyName)
+        {
+            var result = new Dictionary<Type, Type[]>();
+            if (!string.IsNullOrWhiteSpace(assemblyName))
+            {
+                Assembly assembly = Assembly.Load(assemblyName);
+                List<Type> list = assembly.GetTypes().ToList();
+                list = list.Where(x => x.Name.Contains("Service")).ToList();
+                foreach (var item in list.Where(s => !s.IsInterface))
+                {
+                    var interfaceType = item.GetInterfaces();
+                    result.Add(item, interfaceType);
+                }
+            }
+            return result;
         }
     }
 }

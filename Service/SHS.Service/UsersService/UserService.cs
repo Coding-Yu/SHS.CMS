@@ -30,6 +30,8 @@ namespace SHS.Service.UsersService
             {
                 if (user != null)
                 {
+                    user.Icon = "https://tse1-mm.cn.bing.net/th?id=OIP.VWs6ip-0SNpR7Yof8YYfCgAAAA&w=152&h=160&c=8&rs=1&qlt=90&pid=3.1&rm=2";//系统默认头像
+                    user.Password = MD5Encrypt.EncryptBy32(user.Password);
                     user.CreateDate = DateTime.Now;
                     await _repository.AddByAsync(user);
                     return Result.Success(200);
@@ -49,12 +51,12 @@ namespace SHS.Service.UsersService
             {
                 if (!string.IsNullOrEmpty(id.ToString()))
                 {
-                    var entity = _repository.Get(id);
+                    var entity = _repository.Get(Guid.Parse(id));
                     if (entity != null)
                     {
                         entity.IsDel = 1;
                         entity.DeleteDate = DateTime.Now;
-                        entity.DeleteUserId =Guid.Parse(userId);
+                        entity.DeleteUserId = Guid.Parse(userId);
                         var result = await _repository.RemoveByAsync(entity);
                         if (result > 0)
                         {

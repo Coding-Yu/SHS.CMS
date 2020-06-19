@@ -6,6 +6,8 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
+import { getPermissionByRoleId } from '@/api/permission'
+import { getRole } from '@/api/role'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
@@ -34,6 +36,26 @@ router.beforeEach(async(to, from, next) => {
             try {
                 // get user info
                 store.dispatch('user/getInfo')
+                    // store.dispatch('user/getInfo').then(res => {
+                    //     getRole(res.role).then(rres => {
+                    //         getPermissionByRoleId(res.role).then(pres => {
+                    //             var permissionArr = [];
+                    //             pres.data.forEach(function(item) {
+                    //                 permissionArr.push(item.name);
+                    //             })
+                    //             var data = {
+                    //                 roleName: rres.data.name,
+                    //                 permissions: permissionArr
+                    //             }
+                    //             store.dispatch('GenerateRoutes', data).then(pres => {
+                    //                 // console.log(store.getters.addRouters)
+                    //                 router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+                    //                 next({...to, replace: true })
+                    //             })
+                    //         }, 1000)
+                    //     }, 1000)
+
+                // })
                 next()
             } catch (error) {
                 // remove token and go to login page to re-login

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SHS.Domain.Core.Area;
 using SHS.Domain.Core.Articles;
 using SHS.Domain.Core.Categorys;
@@ -9,6 +10,7 @@ using SHS.Infra.Data.Users;
 using SHS.Infrastructu.Encrypt;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace SHS.Infra.Data
@@ -23,12 +25,14 @@ namespace SHS.Infra.Data
         public DbSet<Article> Articles { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<ArticleTag> ArticleTags { get; set; }
+        public DbSet<SHS.Domain.Core.Logger.Log> logs { get; set; }
         public CMSContext() { }
         public CMSContext(DbContextOptions<CMSContext> options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=.;uid=sa;pwd=123456;database=SHS.CMS;");
+            var configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
+            optionsBuilder.UseSqlServer(configuration["DBConfig:MSSQL:ConnectionString"]);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

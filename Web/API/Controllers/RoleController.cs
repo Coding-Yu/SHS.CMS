@@ -35,7 +35,9 @@ namespace API.Controllers
         public async Task<JsonResult> Get(string id)
         {
             var result = await _roleAppService.Get(id);
-            return new JsonResult(result);
+            OutputModel outputModel = new OutputModel();
+            outputModel.Data = result;
+            return new JsonResult(outputModel);
         }
 
         [HttpPost("Add")]

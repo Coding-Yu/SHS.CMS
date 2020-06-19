@@ -49,6 +49,13 @@ namespace SHS.Application.PermissionAppService
             return result;
         }
 
+        public async Task<List<PermissionDto>> GetPermissionByRoleId(string roleId)
+        {
+            var result = new List<PermissionDto>();
+            result = _mapper.Map<List<PermissionDto>>(await _permissionService.GetPermissionByRoleId(roleId));
+            return result;
+        }
+
         public async Task<Result> Update(ModifyPermissionDto dto)
         {
             return await _permissionService.Update(_mapper.Map<Permission>(dto));
